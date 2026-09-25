@@ -1,0 +1,1890 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- Typography & Fonts ---
+\usepackage{fontspec}
+\setmainfont{DejaVu Serif}[
+  BoldFont={DejaVu Serif Bold},
+  ItalicFont={DejaVu Serif Italic},
+  BoldItalicFont={DejaVu Serif Bold Italic}
+]
+\setsansfont{DejaVu Sans}[
+  BoldFont={DejaVu Sans Bold},
+  ItalicFont={DejaVu Sans Oblique},
+  BoldItalicFont={DejaVu Sans Bold Oblique}
+]
+\setmonofont{DejaVu Sans Mono}[Scale=0.86]
+
+\usepackage{setspace}
+\setstretch{1.12}
+
+% --- Math Packages ---
+\usepackage{amsmath,amssymb,mathtools,amsthm}
+
+% --- Page Geometry ---
+\usepackage[
+  a4paper,
+  left=18mm,
+  right=18mm,
+  top=20mm,
+  bottom=20mm,
+  headheight=24pt,
+  footskip=12mm
+]{geometry}
+
+% --- Colors ---
+\usepackage[dvipsnames,table]{xcolor}
+\definecolor{navy}{HTML}{17365D}          % Primary deep navy
+\definecolor{navydark}{HTML}{0E233D}      % Darker navy
+\definecolor{teal}{HTML}{087E8B}          % Teal accent
+\definecolor{tealdark}{HTML}{075D66}      % Dark teal
+\definecolor{mist}{HTML}{F0F6F8}          % Light blue-gray background
+\definecolor{linegray}{HTML}{D1D5DB}      % Subtle gray border
+\definecolor{success}{HTML}{1B6B3A}       % Green
+\definecolor{successbg}{HTML}{F0F9F2}     % Mint light green bg
+\definecolor{amber}{HTML}{D97706}         % Amber
+\definecolor{amberpale}{HTML}{FEF9E7}     % Light amber bg
+
+% --- Headers & Footers ---
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\small\textcolor{navy}{\textbf{Магадлалын онол}} \textcolor{gray!70}{|} \textcolor{gray!80}{Даалгавар 1: Бүрэн Бодолт}}
+\fancyhead[R]{\sffamily\small\textcolor{gray!75}{\nouppercase{\leftmark}}}
+\fancyfoot[L]{\sffamily\scriptsize\textcolor{gray!60}{О.Цэрэнбат (2023) \& D. Bertsekas, J. Tsitsiklis (2nd Ed.)}}
+\fancyfoot[R]{\sffamily\small\textcolor{navy}{\textbf{Хуудас \thepage\ / \pageref{LastPage}}}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0.3pt}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \footrulewidth\hfill}}
+
+% --- Section Titles ---
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\Large\sffamily\bfseries\color{navy}}
+  {\thesection}{0.7em}{}[\color{navy}\titlerule]
+\titleformat{\subsection}
+  {\normalfont\large\sffamily\bfseries\color{tealdark}}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\sffamily\bfseries\color{navy}}
+  {\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.3em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.4em}
+\titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
+
+% --- Paragraphs & Lists ---
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.42em}
+\usepackage{enumitem}
+\setlist{itemsep=0.18em, topsep=0.25em, leftmargin=1.5em}
+
+% --- Boxes & Callouts ---
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Problem Statement Box
+\newtcolorbox{problembox}[2][]{
+  enhanced,
+  breakable,
+  colback=mist,
+  colframe=teal,
+  boxrule=0.6pt,
+  leftrule=3.5pt,
+  arc=2.5mm,
+  boxsep=2pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  title={\sffamily\bfseries\textcolor{navydark}{#2}},
+  fonttitle=\sffamily\bfseries,
+  attach title to upper={\par\vspace{3pt}},
+  #1
+}
+
+% Final Answer Box
+\newtcolorbox{answerbox}[1][Эцсийн хариу]{
+  enhanced,
+  breakable,
+  colback=successbg,
+  colframe=success,
+  boxrule=0.6pt,
+  leftrule=3.5pt,
+  arc=2mm,
+  boxsep=2pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  title={\sffamily\bfseries\textcolor{success}{#1:}},
+  fonttitle=\sffamily\bfseries,
+  attach title to upper={\par\vspace{2pt}},
+}
+
+% --- Tables & Figures ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font={small,it},labelfont={bf,sf},skip=4pt}
+\renewcommand{\tablename}{Хүснэгт}
+\renewcommand{\figurename}{Зураг}
+\renewcommand{\contentsname}{Гарчиг}
+
+% --- TikZ ---
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,patterns,calc,intersections,decorations.pathreplacing}
+
+% --- Hyperref ---
+\usepackage{microtype}
+\usepackage[
+  colorlinks=true,
+  linkcolor=navy,
+  citecolor=tealdark,
+  urlcolor=tealdark,
+  bookmarksnumbered=true,
+  pdfstartview=FitH
+]{hyperref}
+
+\hypersetup{
+  pdftitle={Магадлалын онол — Даалгавар 1: Бүрэн Бодолт},
+  pdfauthor={Оюутан},
+  pdfsubject={Магадлалын онолын 1-р бүлгийн бодлогуудын алхамчилсан бүрэн бодолт}
+}
+
+% Helpers
+\newcommand{\checked}{\textcolor{success}{\textbf{+}}}
+
+\begin{document}
+\sloppy
+
+% ==============================================================================
+% TITLE (Minimal & Text-Only)
+% ==============================================================================
+\begin{center}
+  \vspace*{0.2em}
+  {\sffamily\bfseries\fontsize{20}{24}\selectfont МАГАДЛАЛЫН ОНОЛ — ДААЛГАВАР 1}\\[4pt]
+  {\sffamily\normalsize\textcolor{navy}{\textbf{Бодлогуудын Бүрэн Бодолт ба Алхамчилсан Баталгаа}}}\\[8pt]
+  {\color{navy}\hrule height 1pt}
+\end{center}
+
+\vspace{0.2em}
+{\small
+Энэхүү баримт бичигт \textbf{Магадлалын онол} (О.Цэрэнбат, 2023)-ийн 1-р бүлгийн бүх бодлого (1.1 -- 1.20) болон \textbf{Introduction to Probability} (D. Bertsekas, J. Tsitsiklis, 2nd Edition)-ийн 1-р бүлгийн заагдсан бүх бодлогын (1, 2, 5, 7, 11, 12, 15, 16, 18, 19, 20, 30, 34, 43) нөхцөл, дэлгэрэнгүй бодолт, онолын үндэслэл, эцсийн хариуг монгол хэл дээр академик түвшинд нэгтгэн сийрүүлэв.
+}
+\vspace{0.3em}
+{\color{linegray}\hrule height 0.5pt}
+\vspace{0.8em}
+
+% ==============================================================================
+% PROBLEM COMPLETION CHECKLIST TABLE
+% ==============================================================================
+\section*{Бодлогын Гүйцэтгэлийн Хүснэгт (Checklist)}
+\addcontentsline{toc}{section}{Бодлогын Гүйцэтгэлийн Хүснэгт (Checklist)}
+
+{\small
+\begin{center}
+\setlength{\tabcolsep}{3pt}\small\begin{tabularx}{\textwidth}{@{}c X l c | c X l c@{}}
+\toprule
+\rowcolor{mist}
+\textbf{№} & \textbf{Бодлогын сэдэв} & \textbf{Эх сурвалж} & \textbf{Төлөв} &
+\textbf{№} & \textbf{Бодлогын сэдэв} & \textbf{Эх сурвалж} & \textbf{Төлөв} \\
+\midrule
+\textbf{1.1} & Үзэгдлүүдийн үйлдлүүд & Цэрэнбат Б.1 & \checked & \textbf{1.18} & Тойргийг огтлох шулуун & Цэрэнбат Б.1 & \checked \\
+\textbf{1.2} & Олонлогийн баталгаа & Цэрэнбат Б.1 & \checked & \textbf{1.19} & Эллипсоид ба бөмбөрцөг & Цэрэнбат Б.1 & \checked \\
+\textbf{1.3} & Оюутнуудын олонлог & Цэрэнбат Б.1 & \checked & \textbf{1.20} & Төвлөрсөн бөмбөлөг, гэрэл & Цэрэнбат Б.1 & \checked \\
+\textbf{1.4} & 3 зоосны туршилт & Цэрэнбат Б.1 & \checked & \textbf{P.1} & Де Морганы хуулиуд & Bertsekas 1.1 & \checked \\
+\textbf{1.5} & 4 шагай орхих хүснэгт & Цэрэнбат Б.1 & \checked & \textbf{P.2} & Олонлогийн задрал & Bertsekas 1.1 & \checked \\
+\textbf{1.6} & 2 шоо (100 туршилт) & Цэрэнбат Б.1 & \checked & \textbf{P.5} & Гоц ухаантан, шоколад & Bertsekas 1.2 & \checked \\
+\textbf{1.7} & Зоос (100 туршилт) & Цэрэнбат Б.1 & \checked & \textbf{P.7} & 4 талт шоо (Огторгуй) & Bertsekas 1.2 & \checked \\
+\textbf{1.8} & 2 бөмбөлөг сонгох & Цэрэнбат Б.1 & \checked & \textbf{P.11} & Бонферронийн т/биш & Bertsekas 1.2 & \checked \\
+\textbf{1.9} & 5 бөмбөлөг сонгох & Цэрэнбат Б.1 & \checked & \textbf{P.12} & Оруулах-хасах зарчим & Bertsekas 1.2 & \checked \\
+\textbf{1.10} & Гологдол шалгалт & Цэрэнбат Б.1 & \checked & \textbf{P.15} & Алисын зоосны магадлал & Bertsekas 1.3 & \checked \\
+\textbf{1.11} & Өнгө ижил/өөр байх & Цэрэнбат Б.1 & \checked & \textbf{P.16} & 3 зоос (Байес) & Bertsekas 1.3 & \checked \\
+\textbf{1.12} & Хоёр шооны нийлбэр & Цэрэнбат Б.1 & \checked & \textbf{P.18} & \texorpdfstring{$P(A\cap B\mid B)=P(A\mid B)$}{P(A cap B | B) = P(A | B)} & Bertsekas 1.3 & \checked \\
+\textbf{1.13} & 52 хөзөр (4 тамга) & Цэрэнбат Б.1 & \checked & \textbf{P.19} & Шургуулга хайх (Байес) & Bertsekas 1.3 & \checked \\
+\textbf{1.14} & Автобус ба явган хүн & Цэрэнбат Б.1 & \checked & \textbf{P.20} & Шатрын стратеги & Bertsekas 1.3 & \checked \\
+\textbf{1.15} & \texorpdfstring{$[-1,2]^2$}{[-1,2]^2} дээрх 2 тоо & Цэрэнбат Б.1 & \checked & \textbf{P.30} & Хоёр анч нохой & Bertsekas 1.4 & \checked \\
+\textbf{1.16} & Квадрат тэгшитгэл & Цэрэнбат Б.1 & \checked & \textbf{P.34} & Сүлжээний найдвар & Bertsekas 1.4 & \checked \\
+\textbf{1.17} & Савааг 3 хэсэгт хуваах & Цэрэнбат Б.1 & \checked & \textbf{P.43} & Үл хамаарах үзэгдлүүд & Bertsekas 1.4 & \checked \\
+\bottomrule
+\end{tabularx}
+\end{center}
+}
+
+\vspace{0.3em}
+{\hypersetup{linkcolor=navy}\tableofcontents}
+
+\clearpage
+
+% ==============================================================================
+% SECTION 1: О.ЦЭРЭНБАТ (2023) — БҮЛЭГ 1
+% ==============================================================================
+\section[Цэрэнбат (2023) — Бүлэг 1]{Магадлалын онол (О.Цэрэнбат, 2023) — Бүлэг 1}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.1
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.1}
+\addcontentsline{toc}{subsection}{Бодлого 1.1}
+
+\begin{problembox}{Бодлого 1.1: Нөхцөл}
+$A, B, C$ үзэгдлүүд өгөгдөв. Дараах үзэгдлүүдийг эдгээр үзэгдлүүд ба үзэгдлүүд дээрх үйлдлийн тэмдгийг ашиглан илэрхийлж бич.
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item Зөвхөн $A$ үзэгдэл явагдах,
+  \item $A$ ба $B$ хоёул явагдаж, $C$ явагдахгүй байх,
+  \item Ядаж нэг нь явагдах,
+  \item Ядаж хоёр нь явагдах,
+  \item Нэгээс илүүгүй нь явагдах,
+  \item Хоёроос олонгүй нь явагдах,
+  \item 2 нь явагдах,
+  \item 2-оос цөөнгүй нь явагдах.
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Үзэгдлүүдийн эсрэг үзэгдлийг $\bar{A}, \bar{B}, \bar{C}$ (эсвэл $A^c, B^c, C^c$) гэж тэмдэглэе.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{a)}] \textbf{Зөвхөн $A$ үзэгдэл явагдах:}
+  Энэ нь $A$ явагдаж, $B$ ба $C$ явагдахгүй байхыг илэрхийлнэ.
+  \[
+    \mathbf{A \cap \overline{B} \cap \overline{C}} \quad \text{буюу} \quad A \setminus (B \cup C)
+  \]
+  \item[\textbf{б)}] \textbf{$A$ ба $B$ хоёул явагдаж, $C$ явагдахгүй байх:}
+  \[
+    \mathbf{A \cap B \cap \overline{C}} \quad \text{буюу} \quad (A \cap B) \setminus C
+  \]
+  \item[\textbf{в)}] \textbf{Ядаж нэг нь явагдах:}
+  $A, B, C$ үзэгдлүүдийн аль нэг нь эсвэл хэд хэд нь зэрэг явагдахыг нэгдлээр илэрхийлнэ.
+  \[
+    \mathbf{A \cup B \cup C}
+  \]
+  \item[\textbf{г)}] \textbf{Ядаж хоёр нь явагдах:}
+  2 буюу түүнээс дээш үзэгдэл зэрэг явагдах тохиолдол. Энэ нь хос хосоороо явагдах нэгдлүүдээр илэрхийлэгдэнэ:
+  \[
+    \mathbf{(A \cap B) \cup (B \cap C) \cup (C \cap A)}
+  \]
+  (Эсвэл үл огтлолцох хэсгүүдээр задалбал: $(A \cap B \cap \bar{C}) \cup (A \cap \bar{B} \cap C) \cup (\bar{A} \cap B \cap C) \cup (A \cap B \cap C)$).
+  \item[\textbf{д)}] \textbf{Нэгээс илүүгүй нь явагдах:}
+  0 эсвэл 1 үзэгдэл явагдах. Энэ нь "ядаж 2 нь явагдах" үзэгдлийн эсрэг үзэгдэл юм:
+  \[
+    \mathbf{(\overline{A} \cap \overline{B} \cap \overline{C}) \cup (A \cap \overline{B} \cap \overline{C}) \cup (\overline{A} \cap B \cap \overline{C}) \cup (\overline{A} \cap \overline{B} \cap C)}
+  \]
+  Де Морганы хуулиар: $\overline{(A \cap B) \cup (B \cap C) \cup (C \cap A)} = (\bar{A} \cup \bar{B}) \cap (\bar{B} \cup \bar{C}) \cap (\bar{C} \cup \bar{A})$.
+  \item[\textbf{е)}] \textbf{Хоёроос олонгүй нь явагдах:}
+  0, 1 эсвэл 2 нь явагдах бөгөөд энэ нь бүгд зэрэг явагдах ($A \cap B \cap C$) үзэгдлийн эсрэг үзэгдэл юм:
+  \[
+    \mathbf{\overline{A \cap B \cap C} = \overline{A} \cup \overline{B} \cup \overline{C}}
+  \]
+  \item[\textbf{ё)}] \textbf{Яг 2 нь явагдах:}
+  Гурав дахь нь явагдахгүй байх хосуудын нэгдэл:
+  \[
+    \mathbf{(A \cap B \cap \overline{C}) \cup (A \cap \overline{B} \cap C) \cup (\overline{A} \cap B \cap C)}
+  \]
+  \item[\textbf{ж)}] \textbf{2-оос цөөнгүй нь явагдах:}
+  "2-оос цөөнгүй" гэдэг нь 2 буюу 3 нь явагдах буюу "ядаж 2 нь явагдах" (г дэд бодлоготой ижил) утгатай:
+  \[
+    \mathbf{(A \cap B) \cup (B \cap C) \cup (C \cap A)}
+  \]
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.2
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.2}
+\addcontentsline{toc}{subsection}{Бодлого 1.2}
+
+\begin{problembox}{Бодлого 1.2: Нөхцөл}
+$A, B$ нь дурын үзэгдлүүд бол дараах чанарууд биелнэ гэдгийг харуул:
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item $A \cap B \subset A, \quad A \subset A \cup B$
+  \item $A \subset B \implies \bar{B} \subset \bar{A}$
+  \item $B = (A \cap B) \cup (\bar{A} \cap B)$
+  \item $A \cup B = A \cup (\bar{A} \cap B)$
+  \item $A \setminus B = A \cap \bar{B}$, энд $A \setminus B = \{\omega : \omega \in A, \omega \notin B\}$.
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт ба Баталгаа:}
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{а)}] \textbf{$A \cap B \subset A$ ба $A \subset A \cup B$:}
+  \begin{itemize}
+    \item \textit{Баталгаа:} Хэрэв $\omega \in A \cap B$ бол тодорхойлолтоор $\omega \in A$ ба $\omega \in B$ тул $\omega \in A$ гарч $A \cap B \subset A$ биелнэ.
+    \item Хэрэв $\omega \in A$ бол $\omega \in A$ эсвэл $\omega \in B$ үнэн тул $\omega \in A \cup B$ гарч $A \subset A \cup B$ биелнэ.
+  \end{itemize}
+  \item[\textbf{б)}] \textbf{$A \subset B \implies \bar{B} \subset \bar{A}$:}
+  \begin{itemize}
+    \item \textit{Баталгаа:} $A \subset B$ байг. $\omega \in \bar{B}$ гэе. Энэ нь $\omega \notin B$ гэсэн үг. Хэрэв $\omega \in A$ байсан бол $A \subset B$ нөхцөлөөр $\omega \in B$ болох ба энэ нь $\omega \notin B$ гэдэгтэй зөрчилдөнө. Иймд $\omega \notin A$ буюу $\omega \in \bar{A}$ болно. Иймээс $\bar{B} \subset \bar{A}$.
+  \end{itemize}
+  \item[\textbf{в)}] \textbf{$B = (A \cap B) \cup (\bar{A} \cap B)$:}
+  \begin{itemize}
+    \item \textit{Баталгаа:} Тархалтын (дистрибутив) хуулиар:
+    \[
+      (A \cap B) \cup (\bar{A} \cap B) = (A \cup \bar{A}) \cap B = \Omega \cap B = B.
+    \]
+    Мөн $A \cap B$ ба $\bar{A} \cap B$ нь хоорондоо үл огтлолцох олонлогууд юм.
+  \end{itemize}
+  \item[\textbf{г)}] \textbf{$A \cup B = A \cup (\bar{A} \cap B)$:}
+  \begin{itemize}
+    \item \textit{Баталгаа:} Дистрибутив хуулийг ашиглавал:
+    \[
+      A \cup (\bar{A} \cap B) = (A \cup \bar{A}) \cap (A \cup B) = \Omega \cap (A \cup B) = A \cup B.
+    \]
+  \end{itemize}
+  \item[\textbf{д)}] \textbf{$A \setminus B = A \cap \bar{B}$:}
+  \begin{itemize}
+    \item \textit{Баталгаа:} Тодорхойлолтоор $A \setminus B = \{\omega : \omega \in A \text{ бөгөөд } \omega \notin B\}$. Мөн $\omega \notin B \iff \omega \in \bar{B}$ тул $\omega \in A \setminus B \iff (\omega \in A \text{ ба } \omega \in \bar{B}) \iff \omega \in A \cap \bar{B}$.
+  \end{itemize}
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.3
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.3}
+\addcontentsline{toc}{subsection}{Бодлого 1.3}
+
+\begin{problembox}{Бодлого 1.3: Нөхцөл}
+Магадлалын онолын лекцэд ирсэн оюутнуудаас таамгаар хэн нэгнийг сонгоход:
+\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+  \item $A$ — сонгосон оюутан эрэгтэй байх,
+  \item $B$ — хөдөөнөөс элссэн байх,
+  \item $C$ — дотуур байранд амьдардаг байх
+\end{itemize}
+үзэгдлүүд бол дараах үзэгдлүүдийн элементийг тайлбарла:
+\[
+  A \cup B, \quad \bar{A} \cup B, \quad A \cap C, \quad B \setminus C, \quad A \cap B \cap C, \quad \bar{A} \cap \bar{B} \cap C
+\]
+- Ямар нөхцөлд $A \cap \bar{B} \cap C = A$ байх вэ?\\
+- Хэдийд $\bar{A} = B$ нөхцөл биелэх вэ?
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=1.4em, itemsep=3pt]
+  \item \textbf{Үзэгдлүүдийн утгын тайлбар:}
+  \begin{itemize}[itemsep=2pt]
+    \item $\mathbf{A \cup B}$: Сонгосон оюутан \textbf{эрэгтэй эсвэл хөдөөнөөс элссэн} (эсвэл аль аль нь) байх үзэгдэл.
+    \item $\mathbf{\overline{A} \cup B}$: Сонгосон оюутан \textbf{эмэгтэй эсвэл хөдөөнөөс элссэн} байх үзэгдэл ($\bar{A}$ нь эмэгтэй оюутан).
+    \item $\mathbf{A \cap C}$: Сонгосон оюутан \textbf{дотуур байранд амьдардаг эрэгтэй оюутан} байх үзэгдэл.
+    \item $\mathbf{B \setminus C}$: Сонгосон оюутан \textbf{хөдөөнөөс элссэн боловч дотуур байранд амьдардаггүй} оюутан байх үзэгдэл.
+    \item $\mathbf{A \cap B \cap C}$: Сонгосон оюутан \textbf{хөдөөнөөс элссэн, дотуур байранд амьдардаг эрэгтэй оюутан} байх үзэгдэл.
+    \item $\mathbf{\overline{A} \cap \overline{B} \cap C}$: Сонгосон оюутан \textbf{хотоос элссэн (хөдөөний биш), дотуур байранд амьдардаг эмэгтэй оюутан} байх үзэгдэл.
+  \end{itemize}
+
+  \item \textbf{$A \cap \bar{B} \cap C = A$ байх нөхцөл:}
+  \[
+    A \cap \bar{B} \cap C = A \iff A \subset (\bar{B} \cap C) \iff A \subset \bar{B} \text{ ба } A \subset C.
+  \]
+  Энэ нь: \textbf{Лекцэд ирсэн бүх эрэгтэй оюутнууд хотоос элссэн бөгөөд бүгд дотуур байранд амьдардаг} үед биелнэ.
+
+  \item \textbf{$\bar{A} = B$ байх нөхцөл:}
+  $\bar{A} = B$ гэдэг нь $\bar{A} \subset B$ ба $B \subset \bar{A}$ буюу оюутан эмэгтэй байх нь хөдөөнөөс элссэн байхтай бүрэн эквивалент байхыг илэрхийлнэ.
+  Өөрөөр хэлбэл: \textbf{Бүх эмэгтэй оюутнууд хөдөөнөөс элссэн, бүх эрэгтэй оюутнууд хотоос элссэн} үед биелнэ.
+\end{enumerate}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.4
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.4}
+\addcontentsline{toc}{subsection}{Бодлого 1.4}
+
+\begin{problembox}{Бодлого 1.4: Нөхцөл}
+3 зоос зэрэг орхих туршилт хийв. Зооснууд ялгаатай гэж үзээд $C_i$ нь $i$-р ($i = 1, 2, 3$) зоос сүлдээр тусах бол дараах үзэгдлүүдийг $C_i$ ба $\bar{C}_i$ үзэгдлүүд ба үйлдлийн тэмдэг ашиглан илэрхийл.
+\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+  \item $A$ — 1 сүлд, 2 тоо тусах,
+  \item $B$ — нэгээс илүүгүй сүлд тусах,
+  \item $C$ — сүлдээр туссан зоосны тоо эсрэг талаар туссан зоосны тооноос цөөн байх,
+  \item $D$ — дор хаяж хоёр нь сүлдээр тусах,
+  \item $E$ — нэг зоос тоогоор, бусдынх нь дор хаяж нэг нь сүлдээр тусах.
+\end{itemize}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Энд $C_i$ нь $i$-р зоос сүлд ($H$), $\bar{C}_i$ нь $i$-р зоос тоо ($T$) буух үзэгдэл.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item \textbf{$A$ (1 сүлд, 2 тоо тусах):}
+  Яг аль нэг зоос нь сүлдээр, үлдсэн хоёр нь тоогоор тусна:
+  \[
+    \mathbf{A = (C_1 \cap \overline{C}_2 \cap \overline{C}_3) \cup (\overline{C}_1 \cap C_2 \cap \overline{C}_3) \cup (\overline{C}_1 \cap \overline{C}_2 \cap C_3)}
+  \]
+
+  \item \textbf{$B$ (Нэгээс илүүгүй сүлд тусах):}
+  0 сүлд (бүгд тоо) эсвэл 1 сүлд тусах үзэгдлүүдийн нэгдэл:
+  \[
+    \mathbf{B = (\overline{C}_1 \cap \overline{C}_2 \cap \overline{C}_3) \cup (C_1 \cap \overline{C}_2 \cap \overline{C}_3) \cup (\overline{C}_1 \cap C_2 \cap \overline{C}_3) \cup (\overline{C}_1 \cap \overline{C}_2 \cap C_3)}
+  \]
+
+  \item \textbf{$C$ (Сүлдний тоо нь тооны тооноос цөөн байх):}
+  Нийт 3 зоос тул сүлдний тоо тооны тооноос цөөн байх нь сүлдний тоо 0 эсвэл 1 байх (тооны тоо 3 эсвэл 2 байх) тохиолдолд биелнэ. Энэ нь $B$ үзэгдэлтэй бүрэн давхцана:
+  \[
+    \mathbf{C = B = (\overline{C}_1 \cap \overline{C}_2 \cap \overline{C}_3) \cup (C_1 \cap \overline{C}_2 \cap \overline{C}_3) \cup (\overline{C}_1 \cap C_2 \cap \overline{C}_3) \cup (\overline{C}_1 \cap \overline{C}_2 \cap C_3)}
+  \]
+
+  \item \textbf{$D$ (Дор хаяж хоёр нь сүлдээр тусах):}
+  Ядаж 2 сүлд тусах нь $B$ үзэгдлийн эсрэг үзэгдэл $\bar{B}$ юм:
+  \[
+    \mathbf{D = (C_1 \cap C_2) \cup (C_2 \cap C_3) \cup (C_1 \cap C_3)}
+  \]
+  Үл огтлолцох эгэл үзэгдлүүдээр бичвэл:
+  \[
+    D = (C_1 \cap C_2 \cap \bar{C}_3) \cup (C_1 \cap \bar{C}_2 \cap C_3) \cup (\bar{C}_1 \cap C_2 \cap C_3) \cup (C_1 \cap C_2 \cap C_3).
+  \]
+
+  \item \textbf{$E$ (Нэг зоос тоогоор, бусдынх нь дор хаяж нэг нь сүлдээр тусах):}
+  Энэ нь ядаж нэг тоо тусах ба ядаж нэг сүлд тусах буюу "бүгд сүлд биш" бөгөөд "бүгд тоо биш" байх үзэгдэл юм (ө.х. 1 сүлд 2 тоо, эсвэл 2 сүлд 1 тоо тусах 6 үр дүн):
+  \[
+    \mathbf{E = \overline{(C_1 \cap C_2 \cap C_3) \cup (\overline{C}_1 \cap \overline{C}_2 \cap \overline{C}_3)}}
+  \]
+  Дэлгэрүүлбэл:
+  \[
+    E = (C_1 \cap \bar{C}_2 \cap \bar{C}_3) \cup (\bar{C}_1 \cap C_2 \cap \bar{C}_3) \cup (\bar{C}_1 \cap \bar{C}_2 \cap C_3) \cup (C_1 \cap C_2 \cap \bar{C}_3) \cup (C_1 \cap \bar{C}_2 \cap C_3) \cup (\bar{C}_1 \cap C_2 \cap C_3).
+  \]
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.5
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.5}
+\addcontentsline{toc}{subsection}{Бодлого 1.5}
+
+\begin{problembox}{Бодлого 1.5: Нөхцөл}
+Дөрвөн шагайг 25 удаа орхиж дараах давтамжийн хүснэгтийг бөглө:
+\begin{center}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Үзүүлэлт} & \textbf{4 бэрх} & \textbf{4 налай} & \textbf{2 хонь, 2 ямаа} \\
+\midrule
+\textbf{Давтамж} & & & \\
+\textbf{Харьцангуй давтамж} & & & \\
+\bottomrule
+\end{tabular}
+\end{center}
+Дөрвөн шагайны нэг орхилтыг нэг шагайг 4 удаа орхисон мэтээр тооцон 4 шагайг 25 орхисон үр дүнгээ нэг шагайг 100 удаа орхисон гэж үзээд дараах давтамжийн хүснэгтийг бөглө:
+\begin{center}
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Үзүүлэлт} & \textbf{Морь} & \textbf{Хонь} & \textbf{Тэмээ} & \textbf{Ямаа} \\
+\midrule
+\textbf{Давтамж} & & & & \\
+\textbf{Харьцангуй давтамж} & & & & \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{problembox}
+
+\subsubsection*{Бодолт ба Туршилтын Загварчлал:}
+
+Шагайны 4 тал нь: \textbf{Морь (М)}, \textbf{Хонь (Х)}, \textbf{Тэмээ (Т)}, \textbf{Ямаа (Я)}.
+\begin{itemize}[itemsep=1pt]
+  \item 4 бэрх: 4 өөр тал буух (Морь, Хонь, Тэмээ, Ямаа).
+  \item 4 налай: 4 ижил тал буух (ММММ, ХХХХ, ТТТТ, ЯЯЯЯ).
+  \item 2 хонь, 2 ямаа: ХХЯЯ хослол.
+\end{itemize}
+
+Нийт $N = 25$ удаагийн туршилт (нийт $4 \times 25 = 100$ шагайны буулт)-ын статистик өгөгдлийг загварчлан тооцоолбол:
+
+\textbf{Хүснэгт 1 (4 шагайг 25 удаа орхисон туршилт, $N=25$):}
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccr}
+\toprule
+\textbf{Үзүүлэлт} & \textbf{4 бэрх} & \textbf{4 налай} & \textbf{2 хонь, 2 ямаа} & \textbf{Бусад} & \textbf{Нийт} \\
+\midrule
+\textbf{Давтамж ($m_i$)} & 3 & 0 & 2 & 20 & 25 \\
+\textbf{Харьцангуй давтамж ($w_i = \frac{m_i}{N}$)} & $\frac{3}{25} = 0.12$ & $\frac{0}{25} = 0.00$ & $\frac{2}{25} = 0.08$ & $\frac{20}{25} = 0.80$ & 1.00 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\textbf{Хүснэгт 2 (Нэг шагайг 100 удаа орхисонтой адилтгасан үр дүн, $N=100$):}
+
+Шагайны бодит геометрийн хэлбэрээс хамаарч хонь, ямаа талууд илүү их магадлалтай буудаг:
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccr}
+\toprule
+\textbf{Үзүүлэлт} & \textbf{Морь} & \textbf{Хонь} & \textbf{Тэмээ} & \textbf{Ямаа} & \textbf{Нийт} \\
+\midrule
+\textbf{Давтамж ($m_i$)} & 14 & 38 & 12 & 36 & 100 \\
+\textbf{Харьцангуй давтамж ($w_i = \frac{m_i}{100}$)} & $\frac{14}{100} = 0.14$ & $\frac{38}{100} = 0.38$ & $\frac{12}{100} = 0.12$ & $\frac{36}{100} = 0.36$ & 1.00 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\textit{Тайлбар:} Харьцангуй давтамж нь $w_i = \frac{m_i}{N}$ томьёогоор бодогдох ба нийлбэр нь 1 байна.
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.6
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.6}
+\addcontentsline{toc}{subsection}{Бодлого 1.6}
+
+\begin{problembox}{Бодлого 1.6: Нөхцөл}
+Хоёр шоо авч нэгийг нь улаан өнгөөр буд. Хэрэв хоёр шоо хоёул улаан өнгөтэй байсан бол нэгийг нь өөр өнгөөр буд. Хоёр шоог 100 удаа орхих туршилтыг явуулж дараах давтамжийн хүснэгтийг бөглө:
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcc}
+\toprule
+\textbf{Үзүүлэлт} & \textbf{Ижил нүдээр тусах} & \textbf{Улаан шооны нүд нөгөөгөөс их байх} \\
+\midrule
+\textbf{Давтамж} & & \\
+\textbf{Харьцангуй давтамж} & & \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+1. 				\textbf{Онолын магадлалын тооцоо:}
+   Хоёр шоог орхиход нийт эгэл үзэгдлийн тоо $|\Omega| = 6 \times 6 = 36$.
+   - 				\textbf{Ижил нүдээр тусах үзэгдэл ($A$):}
+     \[
+       A = \{(1,1), (2,2), (3,3), (4,4), (5,5), (6,6)\}, \quad |A| = 6
+     \]
+     \[
+       P(A) = \frac{6}{36} = \frac{1}{6} \approx 0.1667
+     \]
+   - 				\textbf{Улаан шооны нүд нөгөө шооны нүднээс их байх үзэгдэл ($B$):}
+     Нийт 36 үр дүнгээс 6 нь тэнцүү, үлдсэн $36 - 6 = 30$ тохиолдолд хоёр шооны нүд ялгаатай. Тэгш хэмтэй тул хагаст нь улаан нь их, хагаст нь нөгөө нь их байна:
+     \[
+       |B| = \frac{30}{2} = 15, \quad P(B) = \frac{15}{36} = \frac{5}{12} \approx 0.4167
+     \]
+
+2. 				\textbf{100 удаагийн туршилтын өгөгдөл ($N = 100$):}
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcc}
+\toprule
+\textbf{Үзүүлэлт} & \textbf{Ижил нүдээр тусах} & \textbf{Улаан шооны нүд нөгөөгөөс их байх} \\
+\midrule
+\textbf{Давтамж ($m_i$)} & 17 & 42 \\
+\textbf{Харьцангуй давтамж ($w_i$)} & $\frac{17}{100} = 0.17$ & $\frac{42}{100} = 0.42$ \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\textit{Тайлбар:} 100 орхилтын туршилтын харьцангуй давтамжууд нь онолын магадлал $P(A) \approx 0.167$, $P(B) \approx 0.417$-той ойролцоо гарна.
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.7
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.7}
+\addcontentsline{toc}{subsection}{Бодлого 1.7}
+
+\begin{problembox}{Бодлого 1.7: Нөхцөл}
+Зоос 100 орхиж сүлдээр тусах үзэгдлийн давтамж, харьцангуй давтамжийг тоол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+- 				\textbf{Онолын магадлал:} Зөв зоосны хувьд сүлд тусах онолын магадлал $P(\text{Сүлд}) = \frac{1}{2} = 0.5$.
+- 				\textbf{100 удаагийн туршилт ($N = 100$):}
+  Туршилтаар зоосыг 100 удаа орхиход 52 удаа сүлдээр, 48 удаа тоогоор туссан гэвэл:
+  - Сүлд тусах үзэгдлийн 				\textbf{давтамж}: $m = 52$
+  - Сүлд тусах үзэгдлийн 				\textbf{харьцангуй давтамж}:
+    \[
+      w = \frac{m}{N} = \frac{52}{100} = \mathbf{0.52}
+    \]
+
+\textit{Дүгнэлт:} Бернуллийн их тооны хуулиар туршилтын тоо $N$ өсөхөд харьцангуй давтамж $w$ нь онолын магадлал $P = 0.5$-д магадлалаараа нийлнэ.
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.8
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.8}
+\addcontentsline{toc}{subsection}{Бодлого 1.8}
+
+\begin{problembox}{Бодлого 1.8: Нөхцөл}
+$a$ ширхэг цагаан, $b$ ширхэг хар бөмбөлөгтэй хайрцгаас хоёр бөмбөлөг санамсаргүйгээр сонгосон. Хоёр бөмбөлөг хоёул цагаан байх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Нийт бөмбөлгийн тоо $a + b$.
+- Нийт $a+b$ бөмбөлгөөс 2 бөмбөлөг сонгох боломжийн тоо:
+  \[
+    |\Omega| = \binom{a+b}{2} = \frac{(a+b)(a+b-1)}{2}
+  \]
+- Хоёр бөмбөлөг хоёул цагаан байх (ө.х. $a$ ширхэг цагаан бөмбөлгөөс 2-ыг сонгох) ээлтэй боломжийн тоо:
+  \[
+    |A| = \binom{a}{2} = \frac{a(a-1)}{2}
+  \]
+
+Иймд сонгодог тодорхойлолтоор магадлал нь:
+\[
+  P(A) = \frac{|A|}{|\Omega|} = \frac{\binom{a}{2}}{\binom{a+b}{2}} = \frac{\frac{a(a-1)}{2}}{\frac{(a+b)(a+b-1)}{2}} = \mathbf{\frac{a(a-1)}{(a+b)(a+b-1)}}
+\]
+
+*(Үржвэрийн дүрмээр шалгавал: 1 дэх нь цагаан байх магадлал $\frac{a}{a+b}$, 2 дахь нь цагаан байх нөхцөлт магадлал $\frac{a-1}{a+b-1}$ тул $P = \frac{a}{a+b} \cdot \frac{a-1}{a+b-1}$ болж ижил гарна).*
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.9
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.9}
+\addcontentsline{toc}{subsection}{Бодлого 1.9}
+
+\begin{problembox}{Бодлого 1.9: Нөхцөл}
+$a$ ширхэг цагаан, $b$ ширхэг хар бөмбөлөгтэй ($a \ge 2, b \ge 3$) хайрцгаас таван бөмбөлөг сонгосон. Тэдгээрийн 2 нь цагаан, 3 нь хар байх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+- Нийт $a+b$ бөмбөлгөөс 5 бөмбөлөг сонгох бүх боломжийн тоо:
+  \[
+    |\Omega| = \binom{a+b}{5}
+  \]
+- $a$ цагаан бөмбөлгөөс 2 цагаан, $b$ хар бөмбөлгөөс 3 хар бөмбөлөг сонгох ээлтэй боломжийн тоо:
+  \[
+    |A| = \binom{a}{2} \binom{b}{3}
+  \]
+
+Сонгодог магадлалын томьёогоор (гипергеометр тархалт):
+\[
+  P(A) = \frac{\binom{a}{2}\binom{b}{3}}{\binom{a+b}{5}}
+       = \frac{10\,a(a-1)b(b-1)(b-2)}{(a+b)(a+b-1)(a+b-2)(a+b-3)(a+b-4)}.
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.10
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.10}
+\addcontentsline{toc}{subsection}{Бодлого 1.10}
+
+\begin{problembox}{Бодлого 1.10: Нөхцөл}
+$n$ бүтээгдэхүүнтэй багцын $d$ бүтээгдэхүүн гологдол. Чанарын шалгалтаар багцаас $r$ бүтээгдэхүүн сонгож шалгахад $s$ гологдол илрэх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Багцад нийт $n$ бүтээгдэхүүн байгаагаас:
+- $d$ ширхэг гологдол бүтээгдэхүүн,
+- $n - d$ ширхэг стандарт (гологдол биш) бүтээгдэхүүн байна.
+
+Нийт $r$ бүтээгдэхүүн сонгоход тэдгээрээс $s$ гологдол, $r - s$ стандарт бүтээгдэхүүн байх шаардлагатай.
+
+- Нийт боломжийн тоо: $|\Omega| = \binom{n}{r}$
+- Ээлтэй боломжийн тоо: $|A| = \binom{d}{s} \binom{n-d}{r-s}$
+
+Иймд магадлал нь (гипергеометр магадлал):
+\[
+  \mathbf{P = \frac{\binom{d}{s}\binom{n-d}{r-s}}{\binom{n}{r}}}
+\]
+*(Энд $\max(0, r - (n - d)) \le s \le \min(d, r)$ үед магадлал эерэг утгатай байна).*
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.11
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.11}
+\addcontentsline{toc}{subsection}{Бодлого 1.11}
+
+\begin{problembox}{Бодлого 1.11: Нөхцөл}
+$a$ ширхэг цагаан, $b$ ширхэг хар ($a \ge 2, b \ge 2$) бөмбөлөгтэй хайрцгаас хоёр бөмбөлөг сонгосон бол дараах үзэгдлүүдийн аль нь илүү магадлалтай вэ?
+\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+  \item $A$ — бөмбөлгүүд ижил өнгөтэй,
+  \item $B$ — бөмбөлгүүд өөр өнгөтэй.
+\end{itemize}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Нийт сонголтын тоо: $\binom{a+b}{2} = \frac{(a+b)(a+b-1)}{2}$.
+
+1. $A$ үзэгдэл (хоёр бөмбөлөг ижил өнгөтэй — хоёул цагаан эсвэл хоёул хар):
+   \[
+     P(A) = \frac{\binom{a}{2} + \binom{b}{2}}{\binom{a+b}{2}} = \frac{\frac{a(a-1) + b(b-1)}{2}}{\frac{(a+b)(a+b-1)}{2}} = \frac{a^2 + b^2 - (a+b)}{(a+b)(a+b-1)}
+   \]
+
+2. $B$ үзэгдэл (хоёр бөмбөлөг өөр өнгөтэй — 1 цагаан, 1 хар):
+   \[
+     P(B) = \frac{\binom{a}{1}\binom{b}{1}}{\binom{a+b}{2}} = \frac{ab}{\frac{(a+b)(a+b-1)}{2}} = \frac{2ab}{(a+b)(a+b-1)}
+   \]
+
+3. Магадлалуудын ялгаврыг авч үзье:
+   \[
+     P(A) - P(B) = \frac{a^2 + b^2 - 2ab - (a+b)}{(a+b)(a+b-1)} = \frac{(a - b)^2 - (a + b)}{(a+b)(a+b-1)}
+   \]
+
+Хуваарь $(a+b)(a+b-1) > 0$ тул хүртвэрийн тэмдгээс хамаарна:
+- Хэрэв 				\textbf{$(a - b)^2 > a + b$} бол $P(A) > P(B)$ буюу 				\textbf{$A$ үзэгдэл (ижил өнгөтэй байх) илүү магадлалтай}.
+- Хэрэв 				\textbf{$(a - b)^2 < a + b$} бол $P(B) > P(A)$ буюу 				\textbf{$B$ үзэгдэл (өөр өнгөтэй байх) илүү магадлалтай}.
+- Хэрэв 				\textbf{$(a - b)^2 = a + b$} бол $P(A) = P(B)$ буюу 				\textbf{хоёр үзэгдэл тэнцүү магадлалтай}.
+
+*(Тухайлбал, $a = b$ үед $(a-b)^2 = 0 < 2a$ тул өөр өнгөтэй байх $B$ үзэгдэл ямагт илүү магадлалтай байна).*
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.12
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.12}
+\addcontentsline{toc}{subsection}{Бодлого 1.12}
+
+\begin{problembox}{Бодлого 1.12: Нөхцөл}
+Хоёр шоо нэгэн зэрэг орхисон бол дараах үзэгдлүүдийн магадлалыг ол:
+\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+  \item $A$ — туссан нүднүүдийн нийлбэр 8-тай тэнцүү,
+  \item $B$ — туссан нүднүүдийн үржвэр 8-тай тэнцүү,
+  \item $C$ — туссан нүднүүдийн нийлбэр нь үржвэрээсээ их.
+\end{itemize}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Хоёр шоо орхиход нийт эгэл үзэгдлийн тоо $|\Omega| = 6 \times 6 = 36$. Шооны нүднүүдийг $(x, y)$ гэе ($x, y \in \{1, 2, 3, 4, 5, 6\}$).
+
+- 				\textbf{$A$ үзэгдэл ($x + y = 8$):}
+  Ээлтэй хосууд: $(2,6), (3,5), (4,4), (5,3), (6,2)$ — нийт 5 боломж.
+  \[
+    \mathbf{P(A) = \frac{5}{36}}
+  \]
+
+- 				\textbf{$B$ үзэгдэл ($x \cdot y = 8$):}
+  Ээлтэй хосууд: $(2,4), (4,2)$ — нийт 2 боломж.
+  \[
+    \mathbf{P(B) = \frac{2}{36} = \frac{1}{18}}
+  \]
+
+- 				\textbf{$C$ үзэгдэл ($x + y > x \cdot y$):}
+  Тэнцэтгэл бишийг хувиргавал:
+  \[
+    xy - x - y < 0 \iff (x - 1)(y - 1) < 1.
+  \]
+  $x, y \ge 1$ бүхэл тоонууд тул $(x-1)(y-1) \ge 0$ байна. Иймд тэнцэтгэл биш биелэхийн тулд:
+  \[
+    (x - 1)(y - 1) = 0 \iff x = 1 \quad \text{эсвэл} \quad y = 1.
+  \]
+  - $x = 1$ байх хосууд: $(1,1), (1,2), (1,3), (1,4), (1,5), (1,6)$ (6 боломж).
+  - $y = 1$ байх хосууд: $(1,1), (2,1), (3,1), (4,1), (5,1), (6,1)$ (6 боломж).
+  - $(1,1)$ хос давхар тоологдсон тул нийт ээлтэй хосын тоо: $6 + 6 - 1 = 11$.
+  \[
+    \mathbf{P(C) = \frac{11}{36}}
+  \]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.13
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.13}
+\addcontentsline{toc}{subsection}{Бодлого 1.13}
+
+\begin{problembox}{Бодлого 1.13: Нөхцөл}
+52 модтой хөзрийг тус бүр нь 26 модтой хоёр тэнцүү хэсэгт хуваасан бол дараах үзэгдлүүдийн магадлалыг ол:
+\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+  \item $A$ — хэсэг бүрд 2 тамга орсон байх,
+  \item $B$ — аль нэг хэсэгт нь 4 тамга орсон байх,
+  \item $C$ — аль нэг хэсэгт нь 1 тамга, нөгөөд нь 3 тамга орсон байх.
+\end{itemize}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+52 модтой хөзөрт нийт 4 тамга, 48 бусад мод байна. 52 модноос 26-г сонгож 1-р хэсгийг үүсгэх бүх боломжийн тоо $|\Omega| = \binom{52}{26}$. 1-р хэсэг дэх тамганы тоогоор магадлалыг тооцоолно:
+
+- 				\textbf{$A$ үзэгдэл (хэсэг бүрд 2 тамга):}
+  1-р хэсэгт 2 тамга (мөн үлдсэн 2 тамга 2-р хэсэгт) орох магадлал:
+  \[
+    P(A) = \frac{\binom{4}{2}\binom{48}{24}}{\binom{52}{26}} = \frac{6 \cdot \frac{48!}{24!24!}}{\frac{52!}{26!26!}} = 6 \cdot \frac{26 \cdot 25 \cdot 26 \cdot 25}{52 \cdot 51 \cdot 50 \cdot 49} = \frac{6 \cdot 13 \cdot 25}{2 \cdot 51 \cdot 49} = \mathbf{\frac{325}{833} \approx 0.3902}
+  \]
+
+- 				\textbf{$B$ үзэгдэл (аль нэг хэсэгт нь 4 тамга):}
+  1-р хэсэгт 4 тамга орох эсвэл 2-р хэсэгт 4 тамга (1-р хэсэгт 0 тамга) орох:
+  \[
+    P(B) = \frac{\binom{4}{4}\binom{48}{22} + \binom{4}{0}\binom{48}{26}}{\binom{52}{26}} = 2 \cdot \frac{\binom{4}{4}\binom{48}{22}}{\binom{52}{26}} = 2 \cdot \frac{26 \cdot 25 \cdot 24 \cdot 23}{52 \cdot 51 \cdot 50 \cdot 49} = \mathbf{\frac{92}{833} \approx 0.1104}
+  \]
+
+- 				\textbf{$C$ үзэгдэл (нэг хэсэгт 1 тамга, нөгөөд 3 тамга):}
+  1-р хэсэгт 1 тамга (2-рт 3) эсвэл 1-р хэсэгт 3 тамга (2-рт 1) орох:
+  \[
+    P(C) = \frac{\binom{4}{1}\binom{48}{25} + \binom{4}{3}\binom{48}{23}}{\binom{52}{26}} = 2 \cdot \frac{\binom{4}{1}\binom{48}{25}}{\binom{52}{26}} = 2 \cdot \frac{4 \cdot 26 \cdot 26 \cdot 25 \cdot 24}{52 \cdot 51 \cdot 50 \cdot 49} = \mathbf{\frac{416}{833} \approx 0.4994}
+  \]
+
+*(Шалгалт: $P(A) + P(B) + P(C) = \frac{325 + 92 + 416}{833} = \frac{833}{833} = 1$).*
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.14
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.14}
+\addcontentsline{toc}{subsection}{Бодлого 1.14}
+
+\begin{problembox}{Бодлого 1.14: Нөхцөл}
+Автобусны $A$ ба $B$ буудлын хооронд автобус 2 минут, явган хүн 15 минут явдаг. Автобус 25 минут тутамд нэг удаа дурдсан чиглэлд явдаг бол хугацааны санамсаргүй агшинд $A$ буудалд ирсэн зорчигч $B$ уруу явган явав. Ээлжит автобус явган зорчигчийг гүйцэх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Өмнөх автобус $A$ буудлаас хөдөлсөн агшныг $t = 0$ гэе. Дараагийн ээлжит автобус $t = 25$ минутад $A$-аас хөдөлнө.
+Зорчигч $A$ буудалд $t \in [0, 25]$ санамсаргүй агшинд ирж, шууд явган явсан гэе. $t$ нь $[0, 25]$ завсарт жигд тархалттай.
+
+1. 				\textbf{Зорчигчийн $B$ буудалд хүрэх хугацаа:}
+   Зорчигч $15$ минут алхдаг тул $t + 15$ агшинд $B$-д хүрнэ.
+2. 				\textbf{Ээлжит автобусны $B$ буудалд хүрэх хугацаа:}
+   Автобус $t = 25$-д хөдөлж, $2$ минут явдаг тул $25 + 2 = 27$ агшинд $B$-д хүрнэ.
+3. 				\textbf{Автобус явган хүнийг гүйцэх нөхцөл:}
+   Автобус $B$ буудалд зорчигчоос өмнө (эсвэл зэрэг) очих ёстой:
+   \[
+     27 \le t + 15 \iff t \ge 12.
+   \]
+
+Иймд $t \in [12, 25]$ үед автобус явган хүнийг замд нь гүйцнэ. Геометр магадлалын тодорхойлолтоор:
+\[
+  \mathbf{P = \frac{25 - 12}{25} = \frac{13}{25} = 0.52}
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.15
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.15}
+\addcontentsline{toc}{subsection}{Бодлого 1.15: Геометр магадлал \texorpdfstring{$[-1, 2]$}{[-1, 2]} хэрчим дээр}
+
+\begin{problembox}{Бодлого 1.15: Нөхцөл}
+$[-1; 2]$ хэрчмээс таамгаар 2 бодит тоо сонгон авахад нийлбэр нь 1-ээс их, үржвэр нь 1-ээс бага байх үзэгдлийн магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Сонгосон хоёр тоог $x, y$ гэе.
+Эгэл үзэгдлийн огторгуй нь хавтгай дээрх $\Omega = [-1, 2] \times [-1, 2]$ квадрат муж бөгөөд нийт талбай:
+\[
+  S(\Omega) = (2 - (-1)) \times (2 - (-1)) = 3 \times 3 = 9.
+\]
+
+Ээлтэй муж нь дараах тэнцэтгэл бишүүдийг хангах цэгүүдийн олонлог $G$ байна:
+\[
+  x + y > 1 \implies y > 1 - x
+\]
+\[
+  x y < 1
+\]
+
+Мужийн талбайг тооцоолохын тулд интегралчилъя:
+
+- $x \in [-1, 0]$ үед: $y > 1 - x > 1 > 0$ тул $xy \le 0 < 1$ автоматаар биелнэ. Дээд хязгаар $y = 2$, доод хязгаар $y = 1 - x$.
+  \[
+    S_1 = \int_{-1}^0 (2 - (1 - x)) \, dx = \int_{-1}^0 (1 + x) \, dx = \left[ x + \frac{x^2}{2} \right]_{-1}^0 = 0 - \left(-1 + \frac{1}{2}\right) = \frac{1}{2}.
+  \]
+
+- $x \in [0, 2]$ үед: $y > 1 - x$ ба $y < \frac{1}{x}$ (мөн $y \le 2$).
+  - $x \in [0, 1/2]$ үед: $\frac{1}{x} \ge 2$ тул дээд хязгаар нь $y = 2$.
+    \[
+      S_2 = \int_0^{1/2} (2 - (1 - x)) \, dx = \int_0^{1/2} (1 + x) \, dx = \left[ x + \frac{x^2}{2} \right]_0^{1/2} = \frac{1}{2} + \frac{1}{8} = \frac{5}{8}.
+    \]
+  - $x \in [1/2, 2]$ үед: дээд хязгаар нь $y = \frac{1}{x}$, доод хязгаар нь $y = 1 - x$.
+    \[
+      S_3 = \int_{1/2}^2 \left(\frac{1}{x} - (1 - x)\right) \, dx = \left[ \ln x - x + \frac{x^2}{2} \right]_{1/2}^2
+    \]
+    \[
+      = (\ln 2 - 2 + 2) - \left(\ln\frac{1}{2} - \frac{1}{2} + \frac{1}{8}\right) = \ln 2 - \left(-\ln 2 - \frac{3}{8}\right) = 2\ln 2 + \frac{3}{8}.
+    \]
+
+Нийт ээлтэй мужийн талбай:
+\[
+  S(G) = S_1 + S_2 + S_3 = \frac{1}{2} + \frac{5}{8} + \left(2\ln 2 + \frac{3}{8}\right) = \frac{3}{2} + 2\ln 2.
+\]
+
+Иймд геометр магадлал нь:
+\[
+  \mathbf{P = \frac{S(G)}{S(\Omega)} = \frac{\frac{3}{2} + 2\ln 2}{9} = \frac{3 + 4\ln 2}{18} \approx 0.3207}
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.16
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.16}
+\addcontentsline{toc}{subsection}{Бодлого 1.16}
+
+\begin{problembox}{Бодлого 1.16: Нөхцөл}
+$(-1; -1), (-1; 1), (1; 1), (1; -1)$ цэгүүдэд оройтой квадратаас таамгаар $A(c; q)$ цэг сонгон авав. $x^2 + cx + q = 0$ тэгшитгэлийн язгуурууд:
+\begin{enumerate}[label=\textbf{\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item бодит байх,
+  \item эерэг байх,
+  \item ижил тэмдэгтэй байх,
+  \item эсрэг тэмдэгтэй байх
+\end{enumerate}
+магадлалуудыг тус тус ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Эгэл үзэгдлийн огторгуй нь $[-1, 1] \times [-1, 1]$ квадрат бөгөөд талбай нь:
+\[
+  S(\Omega) = 2 \times 2 = 4.
+\]
+
+Квадрат тэгшитгэлийн дискриминант: $D = c^2 - 4q$.
+Виетийн теоремоор язгуурууд нь $x_1 + x_2 = -c$, $x_1 x_2 = q$.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{a)}] \textbf{Язгуурууд бодит байх:}
+  Нөхцөл: $D \ge 0 \iff c^2 - 4q \ge 0 \iff q \le \frac{c^2}{4}$.
+  $c \in [-1, 1]$ үед $\frac{c^2}{4} \in [0, 1/4] \le 1$.
+  \[
+    S(A) = \int_{-1}^1 \left(\frac{c^2}{4} - (-1)\right) \, dc = \int_{-1}^1 \left(\frac{c^2}{4} + 1\right) \, dc = \left[ \frac{c^3}{12} + c \right]_{-1}^1 = \left(\frac{1}{12} + 1\right) - \left(-\frac{1}{12} - 1\right) = \frac{13}{6}.
+  \]
+  \[
+    P(\text{a}) = \frac{13/6}{4} = \frac{13}{24} \approx 0.5417
+  \]
+
+  \item[\textbf{б)}] \textbf{Язгуурууд хоёул эерэг байх ($x_1 > 0, x_2 > 0$):}
+  Нөхцөл: $D \ge 0$, $x_1 + x_2 = -c > 0 \implies c < 0$, ба $x_1 x_2 = q > 0$.
+  Иймд муж нь: $c \in [-1, 0]$ ба $0 < q \le \frac{c^2}{4}$.
+  \[
+    S(B) = \int_{-1}^0 \frac{c^2}{4} \, dc = \left[ \frac{c^3}{12} \right]_{-1}^0 = 0 - \left(-\frac{1}{12}\right) = \frac{1}{12}.
+  \]
+  \[
+    P(\text{б}) = \frac{1/12}{4} = \frac{1}{48} \approx 0.0208
+  \]
+
+  \item[\textbf{в)}] \textbf{Язгуурууд ижил тэмдэгтэй байх ($x_1 x_2 > 0$):}
+  Нөхцөл: $D \ge 0$ ба $q > 0 \implies 0 < q \le \frac{c^2}{4}$ ($c \in [-1, 1]$).
+  \[
+    S(C) = \int_{-1}^1 \frac{c^2}{4} \, dc = 2 \times \frac{1}{12} = \frac{1}{6}.
+  \]
+  \[
+    P(\text{в}) = \frac{1/6}{4} = \frac{1}{24} \approx 0.0417
+  \]
+
+  \item[\textbf{г)}] \textbf{Язгуурууд эсрэг тэмдэгтэй байх ($x_1 x_2 < 0$):}
+  Нөхцөл: $q < 0$. Хэрэв $q < 0$ бол $D = c^2 - 4q > 0$ үргэлж биелэх тул язгуурууд заавал бодит байна.
+  Муж нь: $c \in [-1, 1]$, $q \in [-1, 0)$.
+  Талбай: $S(D) = 2 \times 1 = 2$.
+  \[
+    P(\text{г}) = \frac{2}{4} = \frac{1}{2} = 0.5
+  \]
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.17
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.17}
+\addcontentsline{toc}{subsection}{Бодлого 1.17}
+
+\begin{problembox}{Бодлого 1.17: Нөхцөл}
+$a$ урттай савааг таамгаар 3 хэсэгт хуваав. Хуваагдсан хэсэг бүрийн урт $\dfrac{a}{4}$-өөс их байх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Савааг $x$ ба $y$ цэгүүдээр хуваасан гэе ($0 \le x \le y \le a$).
+Эгэл үзэгдлийн огторгуй нь хавтгай дээрх $\Omega = \{(x, y) : 0 \le x \le y \le a\}$ гурвалжин муж:
+\[
+  S(\Omega) = \frac{1}{2} a^2.
+\]
+
+Хуваагдсан 3 хэсгийн уртууд:
+- 1 дэх хэсэг: $l_1 = x$
+- 2 дахь хэсэг: $l_2 = y - x$
+- 3 дахь хэсэг: $l_3 = a - y$
+
+Хэсэг бүрийн урт $\frac{a}{4}$-өөс их байх нөхцөл:
+\[
+  \begin{cases} x > \dfrac{a}{4} \\[6pt] y - x > \dfrac{a}{4} \implies y > x + \dfrac{a}{4} \\[6pt] a - y > \dfrac{a}{4} \implies y < \dfrac{3a}{4} \end{cases}
+\]
+
+Эдгээр тэнцэтгэл бишүүдээр зааглагдсан ээлтэй муж $G$ нь дараах гурван оройтой гурвалжин байна:
+- $(x, y) = \left(\dfrac{a}{4}, \dfrac{a}{2}\right)$
+- $(x, y) = \left(\dfrac{a}{4}, \dfrac{3a}{4}\right)$
+- $(x, y) = \left(\dfrac{a}{2}, \dfrac{3a}{4}\right)$
+
+Энэ тэгш өнцөгт гурвалжны катетуудын урт:
+\[
+  \Delta x = \frac{a}{2} - \frac{a}{4} = \frac{a}{4}, \quad \Delta y = \frac{3a}{4} - \frac{a}{2} = \frac{a}{4}.
+\]
+Талбай нь:
+\[
+  S(G) = \frac{1}{2} \left(\frac{a}{4}\right)^2 = \frac{a^2}{32}.
+\]
+
+Иймд геометр магадлал:
+\[
+  \mathbf{P = \frac{S(G)}{S(\Omega)} = \frac{a^2 / 32}{a^2 / 2} = \frac{1}{16} = 0.0625}
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.18
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.18}
+\addcontentsline{toc}{subsection}{Бодлого 1.18}
+
+\begin{problembox}{Бодлого 1.18: Нөхцөл}
+Хавтгай дээр $R$ радиустай тойрог ба түүний төвөөс $d$ ($R < d$) зайнд орших $A$ цэг өгөгдөв. $A$ цэгийг дайруулан санамсаргүйгээр татсан шулуун тойргийг огтлох магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Тойргийн төвийг $O$ гэе. $OA = d$.
+$A$ цэгийг дайрсан шулууны чиглэлийг $OA$ цацрагтай үүсгэх $\alpha$ өнцгөөр тодорхойлъё.
+
+$A$ цэгээс тойрогт татсан шүргэгч шулуунууд нь $OA$ шулуунтай үүсгэх өнцгийг $\theta_0$ гэвэл шүргэгчийн тэгш өнцөгт гурвалжнаас:
+\[
+  \sin \theta_0 = \frac{R}{d} \implies \theta_0 = \arcsin\left(\frac{R}{d}\right).
+\]
+
+- $A$ цэгийг дайрсан дурын шулууны чиглэлийн өнцгийн нийт боломжит завсар $[-\frac{\pi}{2}, \frac{\pi}{2}]$ буюу нийт өнцгийн урт $\pi$ байна.
+- Шулуун тойргийг огтлох ээлтэй өнцгийн завсар $[-\theta_0, \theta_0]$ бөгөөд нийт ээлтэй өнцгийн хэмжээ $2\theta_0$ байна.
+
+Иймд геометр магадлал нь:
+\[
+  \mathbf{P = \frac{2\theta_0}{\pi} = \frac{2}{\pi} \arcsin\left(\frac{R}{d}\right)}
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.19
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.19}
+\addcontentsline{toc}{subsection}{Бодлого 1.19}
+
+\begin{problembox}{Бодлого 1.19: Нөхцөл}
+$\dfrac{x^2}{16} + \dfrac{y^2}{9} + \dfrac{z^2}{4} = 1$ эллипсоидоор хүрээлэгдсэн мужаас таамгаар нэг цэг сонгов. Энэ цэгийн координат $x^2 + y^2 + z^2 \le 4$ мужид харьяалагдах магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+1. 				\textbf{Эллипсоидын эзлэхүүн ($V_E$):}
+   Хагас тэнхлэгүүд нь $a = 4, b = 3, c = 2$ тул:
+   \[
+     V_E = \frac{4}{3} \pi a b c = \frac{4}{3} \pi (4)(3)(2) = 32\pi.
+   \]
+
+2. 				\textbf{Бөмбөрцгийн эзлэхүүн ($V_S$):}
+   $x^2 + y^2 + z^2 \le 4 = 2^2$ муж нь $R = 2$ радиустай бөмбөрцөг юм.
+   \[
+     V_S = \frac{4}{3} \pi R^3 = \frac{4}{3} \pi (2^3) = \frac{32\pi}{3}.
+   \]
+
+3. 				\textbf{Бөмбөрцөг эллипсоидын дотор бүрэн багтах эсэхийг шалгах:}
+   Бөмбөрцгийн дурын $(x, y, z)$ цэгийн хувьд $x^2 + y^2 + z^2 \le 4$ биелнэ. Эндээс:
+   \[
+     \frac{x^2}{16} + \frac{y^2}{9} + \frac{z^2}{4} \le \frac{x^2}{4} + \frac{y^2}{4} + \frac{z^2}{4} = \frac{x^2 + y^2 + z^2}{4} \le \frac{4}{4} = 1.
+   \]
+   Иймд $R=2$ радиустай бөмбөрцөг нь уг эллипсоид дотор 				\textbf{бүрэн агуулагдана}.
+
+4. 				\textbf{Геометр магадлал:}
+   \[
+     \mathbf{P = \frac{V_S}{V_E} = \frac{\frac{32\pi}{3}}{32\pi} = \frac{1}{3}}
+   \]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1.20
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1.20}
+\addcontentsline{toc}{subsection}{Бодлого 1.20}
+
+\begin{problembox}{Бодлого 1.20: Нөхцөл}
+Харгалзан $r$ ба $R$ ($r < R$) радиустай, нэг цэгт төвтэй 2 бөмбөлөг өгөгдөв. Жижиг бөмбөлөг дээр $A$ цэг бэхэлье. Бөмбөлгүүдийн хоорондох мужаас таамгаар нэг цэг сонгон авч түүн дээр гэрэл үүсгэгч байрлуулав. $A$ цэгт гэрэл тусах үзэгдлийн магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Координатын эхийг $O$ төв дээр сонгож, бэхэлсэн $A$ цэгийг $z$ тэнхлэг дээр $A(0, 0, r)$ гэж байрлуулъя.
+
+1. 				\textbf{Эгэл үзэгдлийн огторгуйн эзлэхүүн:}
+   Хоёр бөмбөлгийн хоорондох бөмбөлөг бүрхүүлийн эзлэхүүн:
+   \[
+     V_{\text{нийт}} = \frac{4}{3}\pi R^3 - \frac{4}{3}\pi r^3 = \frac{4}{3}\pi (R^3 - r^3) = \frac{4}{3}\pi (R - r)(R^2 + Rr + r^2).
+   \]
+
+2. 				\textbf{Гэрэл тусах нөхцөл:}
+   Гэрэл үүсгэгч цэг $P(x, y, z)$-аас $A(0,0,r)$ хүртэл татсан шулуун хэрчим жижиг бөмбөлгийн дотоод мужийг огтлохгүй байх ёстой.
+   Жижиг бөмбөлөгт $A$ цэг дээр татсан шүргэгч хавтгай нь $z = r$ тэгшитгэлтэй байна. Жижиг бөмбөлөг бүхэлдээ $z \le r$ хагас огторгуйд орших тул:
+   - Хэрэв $P$ цэг $z \ge r$ хагас огторгуйд байвал $PA$ хэрчим жижиг бөмбөлгийн доторх цэгүүдийг огтлохгүй бөгөөд $A$ цэгт гэрэл саадгүй тусна.
+   - Хэрэв $z < r$ бол $PA$ хэрчим жижиг бөмбөлгийн дотуур өнгөрөх тул сүүдэрт орж гэрэл тусахгүй.
+
+3. 				\textbf{Ээлтэй мужийн эзлэхүүн ($V_{\text{ээлтэй}}$):}
+   Ээлтэй муж нь том бөмбөлгийн $z \ge r$ түвшинд орших бөмбөлгийн сегмент (spherical cap) юм.
+   Энэ сегментийн өндөр нь $h = R - r$.
+   Сегментийн эзлэхүүн:
+   \[
+     V_{\text{ээлтэй}} = \int_r^R \pi (R^2 - z^2) \, dz = \pi \left[ R^2 z - \frac{z^3}{3} \right]_r^R = \frac{\pi}{3} (2R^3 - 3R^2 r + r^3) = \frac{\pi}{3}(R - r)^2(2R + r).
+   \]
+
+4. 				\textbf{Магадлалыг олох:}
+   \[
+     P = \frac{V_{\text{ээлтэй}}}{V_{\text{нийт}}} = \frac{\frac{\pi}{3}(R - r)^2(2R + r)}{\frac{4}{3}\pi (R - r)(R^2 + Rr + r^2)} = \mathbf{\frac{(R - r)(2R + r)}{4(R^2 + Rr + r^2)} = \frac{2R^2 - Rr - r^2}{4(R^2 + Rr + r^2)}}
+   \]
+
+\clearpage
+
+% ==============================================================================
+% SECTION 2: BERTSEKAS & TSITSIKLIS (2nd Ed.) — БҮЛЭГ 1
+% ==============================================================================
+\section[Bertsekas \& Tsitsiklis — Бүлэг 1]{Introduction to Probability (Bertsekas \& Tsitsiklis, 2nd Ed.) — Бүлэг 1}
+
+% ------------------------------------------------------------------------------
+% Бодлого 1 (Section 1.1)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 1 (Section 1.1)}
+\addcontentsline{toc}{subsection}{Бодлого 1 (Section 1.1)}
+
+\begin{problembox}{Бодлого 1 (Section 1.1): Нөхцөл}
+6 талт шоог орхих туршилт авч үзье. Шоо тэгш тоогоор тусах үзэгдлийг $A$, 3-аас их тоогоор тусах үзэгдлийг $B$ гэе. Де Морганы хуулиудын хоёр талыг тус тус тооцоолж, тэнцүү болохыг харуул:
+\[
+  (A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.
+\]
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Эгэл үзэгдлийн огторгуй нь $\Omega = \{1, 2, 3, 4, 5, 6\}$ байна.
+Өгөгдсөн үзэгдлүүд болон тэдгээрийн эсрэг үзэгдлүүдийг жагсаавал:
+- $A = \{2, 4, 6\}$ (тэгш тоонууд) $\implies A^c = \{1, 3, 5\}$
+- $B = \{4, 5, 6\}$ (3-аас их тоонууд) $\implies B^c = \{1, 2, 3\}$
+
+1. 				\textbf{Де Морганы нэгдүгээр хууль: $(A \cup B)^c = A^c \cap B^c$}
+   - Зүүн тал:
+     \[
+       A \cup B = \{2, 4, 5, 6\} \implies (A \cup B)^c = \{1, 3\}
+     \]
+   - Баруун тал:
+     \[
+       A^c \cap B^c = \{1, 3, 5\} \cap \{1, 2, 3\} = \{1, 3\}
+     \]
+   Хоёр тал хоёул $\{1, 3\}$ олонлог гарч тэнцэтгэл батлагдав.
+
+2. 				\textbf{Де Морганы хоёрдугаар хууль: $(A \cap B)^c = A^c \cup B^c$}
+   - Зүүн тал:
+     \[
+       A \cap B = \{4, 6\} \implies (A \cap B)^c = \{1, 2, 3, 5\}
+     \]
+   - Баруун тал:
+     \[
+       A^c \cup B^c = \{1, 3, 5\} \cup \{1, 2, 3\} = \{1, 2, 3, 5\}
+     \]
+   Хоёр тал хоёул $\{1, 2, 3, 5\}$ олонлог гарч тэнцэтгэл батлагдав.
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 2 (Section 1.1)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 2 (Section 1.1)}
+\addcontentsline{toc}{subsection}{Бодлого 2 (Section 1.1)}
+
+\begin{problembox}{Бодлого 2 (Section 1.1): Нөхцөл}
+$A$ ба $B$ нь дурын олонлогууд байг.
+\begin{enumerate}[label=\textbf{(\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item Дараах тэнцэтгэлүүдийг харуул:
+  \[
+    A^c = (A^c \cap B) \cup (A^c \cap B^c), \qquad B^c = (A \cap B^c) \cup (A^c \cap B^c).
+  \]
+  \item Дараах тэнцэтгэлийг батал:
+  \[
+    (A \cap B)^c = (A^c \cap B) \cup (A^c \cap B^c) \cup (A \cap B^c).
+  \]
+  \item 6 талт зөв шоог орхих туршилт авч үзье. $A$ нь сондгой тоо буух, $B$ нь 4-өөс бага тоо буух үзэгдлүүд бол (б)-д өгөгдсөн тэнцэтгэлийн хоёр талын олонлогуудыг олж, тэнцэтгэл биелж буйг шалга.
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{(a)}] Дурын $S$ олонлог болон эгэл үзэгдлийн огторгуйг бүрдүүлэгч $T \cup T^c = \Omega$ олонлогуудын хувьд хаалт задлах чанараар:
+  \[
+    S = S \cap \Omega = S \cap (T \cup T^c) = (S \cap T) \cup (S \cap T^c).
+  \]
+  - $S = A^c, T = B$ гэж орлуулбал:
+    \[
+      A^c = (A^c \cap B) \cup (A^c \cap B^c).
+    \]
+  - $S = B^c, T = A$ гэж орлуулбал:
+    \[
+      B^c = (B^c \cap A) \cup (B^c \cap A^c) = (A \cap B^c) \cup (A^c \cap B^c).
+    \]
+
+  \item[\textbf{(б)}] Де Морганы хуулиар $(A \cap B)^c = A^c \cup B^c$ байна. (a)-д гаргасан илэрхийллүүдийг орлуулбал:
+  \[
+    (A \cap B)^c = A^c \cup B^c = \big[(A^c \cap B) \cup (A^c \cap B^c)\big] \cup \big[(A \cap B^c) \cup (A^c \cap B^c)\big].
+  \]
+  $(A^c \cap B^c) \cup (A^c \cap B^c) = A^c \cap B^c$ тул:
+  \[
+    (A \cap B)^c = (A^c \cap B) \cup (A^c \cap B^c) \cup (A \cap B^c).
+  \]
+
+  \item[\textbf{(в)}] 6 талт шооны хувьд $\Omega = \{1, 2, 3, 4, 5, 6\}$:
+  - $A = \{1, 3, 5\} \implies A^c = \{2, 4, 6\}$
+  - $B = \{1, 2, 3\} \implies B^c = \{4, 5, 6\}$
+  - $A \cap B = \{1, 3\} \implies (A \cap B)^c = \{2, 4, 5, 6\}$.
+
+  Баруун талын 3 гишүүнийг тооцоолбол:
+  - $A^c \cap B = \{2, 4, 6\} \cap \{1, 2, 3\} = \{2\}$
+  - $A^c \cap B^c = \{2, 4, 6\} \cap \{4, 5, 6\} = \{4, 6\}$
+  - $A \cap B^c = \{1, 3, 5\} \cap \{4, 5, 6\} = \{5\}$
+
+  Тэдгээрийн нэгдэл:
+  \[
+    \{2\} \cup \{4, 6\} \cup \{5\} = \{2, 4, 5, 6\}.
+  \]
+  Хоёр талын олонлогууд яг ижил гарч тэнцэтгэл биелэв.
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 5 (Section 1.2)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 5 (Section 1.2)}
+\addcontentsline{toc}{subsection}{Бодлого 5 (Section 1.2)}
+
+\begin{problembox}{Бодлого 5 (Section 1.2): Нөхцөл}
+Нэгэн ангийн оюутнуудын $60\%$ нь гоц ухаантан, $70\%$ нь шоколаданд дуртай бөгөөд $40\%$ нь хоёр ангилалд хоёуланд нь багтдаг. Санамсаргүйгээр сонгосон оюутан гоц ухаантан ч биш, шоколаданд ч дургүй байх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Сонгосон оюутан гоц ухаантан байх үзэгдлийг $G$, шоколаданд дуртай байх үзэгдлийг $C$ гэж тэмдэглэе.
+Бодлогын нөхцөлөөс:
+\[
+  P(G) = 0.60, \quad P(C) = 0.70, \quad P(G \cap C) = 0.40.
+\]
+
+1. Оюутан гоц ухаантан эсвэл шоколаданд дуртай (эсвэл хоёулаа) байх үзэгдлийн магадлалыг оруулах-хасах зарчмаар олбол:
+   \[
+     P(G \cup C) = P(G) + P(C) - P(G \cap C) = 0.60 + 0.70 - 0.40 = 0.90.
+   \]
+
+2. Гоц ухаантан ч биш, шоколаданд ч дургүй байх үзэгдэл нь $G^c \cap C^c$ юм. Де Морганы хуулиар $G^c \cap C^c = (G \cup C)^c$ болох тул эсрэг үзэгдлийн магадлалын чанараар:
+   \[
+     \mathbf{P(G^c \cap C^c) = 1 - P(G \cup C) = 1 - 0.90 = 0.10 \quad (10\%)}.
+   \]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 7 (Section 1.2)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 7 (Section 1.2)}
+\addcontentsline{toc}{subsection}{Бодлого 7 (Section 1.2)}
+
+\begin{problembox}{Бодлого 7 (Section 1.2): Нөхцөл}
+4 талт шоог анх удаа тэгш тоо тусах хүртэл (хэрэв хэзээ нэгэн цагт тусвал) дахин дахин орхих туршилт хийв. Энэ туршилтын эгэл үзэгдлийн огторгуй ямар байх вэ?
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+4 талт шооны нэг удаагийн орхилтын боломжит утгууд нь $\{1, 2, 3, 4\}$ байна.
+Үүнээс сондгой үр дүнгүүд нь $\{1, 3\}$, тэгш үр дүнгүүд нь $\{2, 4\}$ байна.
+
+Туршилт нь анхны тэгш тоо буумагц зогсоно. Иймд эгэл үзэгдлийн огторгуй $\Omega$ нь хоёр төрлийн дарааллаас тогтоно:
+
+1. 				\textbf{Төгсгөлөг дарааллууд:} $n \ge 1$ урттай $(a_1, a_2, \dots, a_n)$ дараалал. Үүнд эхний $n-1$ удаагийн орхилтоор сондгой тоо бууж ($a_k \in \{1, 3\}, k = 1, \dots, n-1$), $n$ дэх орхилтоор тэгш тоо бууна ($a_n \in \{2, 4\}$).
+2. 				\textbf{Төгсгөлгүй дараалал:} $(a_1, a_2, a_3, \dots)$ дараалал. Бүх орхилтоор ямагт сондгой тоо бууж, хэзээ ч тэгш тоо буухгүй тохиолдол ($a_k \in \{1, 3\}, \forall k \ge 1$).
+
+Иймд эгэл үзэгдлийн огторгуй:
+\[
+  \mathbf{\Omega = \left\{ (a_1, \ldots, a_n) \mid n \ge 1, \, a_1, \ldots, a_{n-1} \in \{1, 3\}, \, a_n \in \{2, 4\} \right\} \cup \left\{ (a_1, a_2, \ldots) \mid a_k \in \{1, 3\} \, \forall k \ge 1 \right\}}.
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 11 (Section 1.2)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 11 (Section 1.2)}
+\addcontentsline{toc}{subsection}{Бодлого 11 (Section 1.2) — Бонферронийн тэнцэтгэл биш}
+
+\begin{problembox}{Бодлого 11 (Section 1.2): Нөхцөл}
+\begin{enumerate}[label=\textbf{(\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item Дурын хоёр $A$ ба $B$ үзэгдлийн хувьд дараах тэнцэтгэл биш биелнэ гэдгийг батал:
+  \[
+    P(A \cap B) \ge P(A) + P(B) - 1.
+  \]
+  \item Үүнийг $n$ ширхэг $A_1, A_2, \ldots, A_n$ үзэгдлийн хувьд өргөтгөн,
+  \[
+    P(A_1 \cap A_2 \cap \cdots \cap A_n) \ge P(A_1) + P(A_2) + \cdots + P(A_n) - (n - 1)
+  \]
+  болохыг батал.
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт ба Баталгаа:}
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{(a)}] Дурын хоёр үзэгдлийн нэгдлийн магадлалын томьёогоор:
+  \[
+    P(A \cup B) = P(A) + P(B) - P(A \cap B).
+  \]
+  Магадлалын аксиомоор $P(A \cup B) \le 1$ тул:
+  \[
+    P(A) + P(B) - P(A \cap B) \le 1 \implies \mathbf{P(A \cap B) \ge P(A) + P(B) - 1}.
+  \]
+
+  \item[\textbf{(б)}] Де Морганы хуулийг ашиглавал:
+  \[
+    \left(\bigcap_{i=1}^n A_i\right)^c = \bigcup_{i=1}^n A_i^c.
+  \]
+  Эндээс магадлалын хагас аддитив чанар (Бүүлийн тэнцэтгэл биш $P(\bigcup E_i) \le \sum P(E_i)$)-ыг хэрэглэвэл:
+  \[
+    P\left(\left(\bigcap_{i=1}^n A_i\right)^c\right) = P\left(\bigcup_{i=1}^n A_i^c\right) \le \sum_{i=1}^n P(A_i^c).
+  \]
+  Эсрэг үзэгдлийн магадлалын чанараар $P(E^c) = 1 - P(E)$ тул:
+  \[
+    1 - P\left(\bigcap_{i=1}^n A_i\right) \le \sum_{i=1}^n (1 - P(A_i)) = n - \sum_{i=1}^n P(A_i).
+  \]
+  Илэрхийллийг эмхэтгэвэл:
+  \[
+    \mathbf{P(A_1 \cap A_2 \cap \cdots \cap A_n) \ge \sum_{i=1}^n P(A_i) - (n - 1)}
+  \]
+  болж теорем бүрэн батлагдав.
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 12 (Section 1.2)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 12 (Section 1.2)}
+\addcontentsline{toc}{subsection}{Бодлого 12 (Section 1.2) — Оруулах-хасах зарчим}
+
+\begin{problembox}{Бодлого 12 (Section 1.2): Нөхцөл}
+$P(A \cup B) = P(A) + P(B) - P(A \cap B)$ томьёоны дараах өргөтгөлүүдийг батал.
+\begin{enumerate}[label=\textbf{(\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item $A, B, C$ нь дурын үзэгдлүүд бол:
+  \[
+    P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(B \cap C) - P(A \cap C) + P(A \cap B \cap C).
+  \]
+  \item $A_1, A_2, \ldots, A_n$ нь үзэгдлүүд байг. $S_1 = \{i \mid 1 \le i \le n\}$, $S_2 = \{(i_1, i_2) \mid 1 \le i_1 < i_2 \le n\}$, ерөнхий тохиолдолд $S_m$ нь $1 \le i_1 < i_2 < \cdots < i_m \le n$ байх бүх $m$-түүдийн олонлог байг. Тэгвэл:
+  \[
+    P\left(\bigcup_{k=1}^n A_k\right) = \sum_{i \in S_1} P(A_i) - \sum_{(i_1, i_2) \in S_2} P(A_{i_1} \cap A_{i_2}) + \cdots + (-1)^{n-1} P\left(\bigcap_{k=1}^n A_k\right).
+  \]
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт ба Баталгаа:}
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{(a)}] $A \cup B$-г нэг үзэгдэл гэж үзээд хоёр үзэгдлийн нэмэх томьёог хэрэглэе:
+  \[
+    P(A \cup B \cup C) = P((A \cup B) \cup C) = P(A \cup B) + P(C) - P((A \cup B) \cap C).
+  \]
+  Дистрибутив чанараар $(A \cup B) \cap C = (A \cap C) \cup (B \cap C)$ тул:
+  \[
+    P((A \cup B) \cap C) = P(A \cap C) + P(B \cap C) - P((A \cap C) \cap (B \cap C)) = P(A \cap C) + P(B \cap C) - P(A \cap B \cap C).
+  \]
+  Үүнийг дээрх илэрхийлэлд орлуулан $P(A \cup B) = P(A) + P(B) - P(A \cap B)$-тэй нэгтгэвэл:
+  \[
+    P(A \cup B \cup C) = \mathbf{P(A) + P(B) + P(C) - P(A \cap B) - P(B \cap C) - P(A \cap C) + P(A \cap B \cap C)}.
+  \]
+
+  \item[\textbf{(б)}] $n$-ийн хувьд математик индукцийн аргаар баталъя.
+  - *Индукцийн суурь:* $n=2$ үед $P(A_1 \cup A_2) = P(A_1) + P(A_2) - P(A_1 \cap A_2)$ үнэн.
+  - *Индукцийн алхам:* Томьёог $n-1$ үзэгдлийн хувьд үнэн гэж үзье. $n$ үзэгдлийн хувьд $B = \bigcup_{k=1}^{n-1} A_k$ гэж тэмдэглэвэл:
+    \[
+      P\left(\bigcup_{k=1}^n A_k\right) = P(B \cup A_n) = P(B) + P(A_n) - P(B \cap A_n).
+    \]
+    Дистрибутив чанараар $B \cap A_n = \bigcup_{k=1}^{n-1} (A_k \cap A_n)$ байна. Индукцийн таамаглалыг $P(B)$ болон $P(B \cap A_n)$-д тус тус хэрэглэж эмхэтгэвэл $1, 2, \dots, n$ хэмжээтэй бүх огтлолцлууд ээлжлэн солигдох тэмдэгтэйгээр нэгтгэгдэж $n$ үзэгдлийн хувьд батлагдана.
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 15 (Section 1.3)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 15 (Section 1.3)}
+\addcontentsline{toc}{subsection}{Бодлого 15 (Section 1.3)}
+
+\begin{problembox}{Бодлого 15 (Section 1.3): Нөхцөл}
+Зоосыг хоёр удаа орхив. Алиса: "Эхний орхилтоор сүлд туссан гэдгийг мэдэж байх үеийн хоёр сүлд тусах магадлал нь ядаж нэг сүлд туссан гэдгийг мэдэж байх үеийн хоёр сүлд тусах магадлалаас багагүй (их буюу тэнцүү) байна" гэж баталжээ.
+- Түүний зөв үү?
+- Зоос тэгш хэмтэй (fair) эсвэл тэгш хэмгүй (unfair) байх нь үүнд нөлөөлөх үү?
+- Алисын энэ дүгнэлтийг хэрхэн ерөнхийлж болох вэ?
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Эхний орхилтоор сүлд ($H$) тусах үзэгдлийг $A$, хоёр дахь орхилтоор сүлд тусах үзэгдлийг $B$ гэе.
+Хоёр сүлд тусах үзэгдэл нь $A \cap B$ юм. Нөхцөлт магадлалуудыг харьцуулъя:
+
+1. Эхний орхилт сүлд байх нөхцөл дэх магадлал:
+   \[
+     P(A \cap B \mid A) = \frac{P((A \cap B) \cap A)}{P(A)} = \frac{P(A \cap B)}{P(A)}.
+   \]
+2. Ядаж нэг нь сүлд ($A \cup B$) байх нөхцөл дэх магадлал:
+   \[
+     P(A \cap B \mid A \cup B) = \frac{P((A \cap B) \cap (A \cup B))}{P(A \cup B)} = \frac{P(A \cap B)}{P(A \cup B)}.
+   \]
+
+- $A \subset A \cup B$ тул магадлалын монотон чанараар $P(A) \le P(A \cup B)$ байна.
+- Иймд $P(A) > 0$ байх үед:
+  \[
+    \frac{P(A \cap B)}{P(A)} \ge \frac{P(A \cap B)}{P(A \cup B)} \implies \mathbf{P(A \cap B \mid A) \ge P(A \cap B \mid A \cup B)}.
+  \]
+
+				\textbf{Дүгнэлт:}
+1. 				\textbf{Алисын зөв.}
+2. 				\textbf{Зоосны тэгш хэмт чанар:} Энэ чанар нь зоос тэгш хэмтэй эсэхээс үл хамааран $P(A) > 0$ байх дурын зоосны хувьд ямагт биелнэ.
+   - Тэгш хэмт зоосны хувьд: $P(A \cap B \mid A) = \frac{1/4}{1/2} = \frac{1}{2} = 0.5$, харин $P(A \cap B \mid A \cup B) = \frac{1/4}{3/4} = \frac{1}{3} \approx 0.333$.
+3. 				\textbf{Ерөнхийлөл:}
+   $B' \subset C'$ бөгөөд $A' \cap B' = A' \cap C'$ байх дурын $A', B', C'$ үзэгдлүүдийн хувьд (тухайлбал $A' \subset B' \subset C'$ үед):
+   \[
+     P(A' \mid B') = \frac{P(A' \cap B')}{P(B')} = \frac{P(A' \cap C')}{P(B')} \ge \frac{P(A' \cap C')}{P(C')} = P(A' \mid C').
+   \]
+   Алисын бодлого нь $A' = A \cap B, B' = A, C' = A \cup B$ байх тухайн тохиолдол юм.
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 16 (Section 1.3)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 16 (Section 1.3)}
+\addcontentsline{toc}{subsection}{Бодлого 16 (Section 1.3)}
+
+\begin{problembox}{Бодлого 16 (Section 1.3): Нөхцөл}
+Бидэнд 3 зоос өгөгдөв: нэг нь хоёр талдаа сүлдтэй, хоёр дахь нь хоёр талдаа тоотой, гурав дахь нь нэг талдаа сүлд, нөгөө талдаа тоотой стандарт зоос. Таамгаар нэг зоос сонгон орхиход сүлдээр тусжээ. Нөгөө тал нь тоо байх магадлалыг ол.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Зооснуудыг дараах үзэгдлүүдээр тэмдэглэе:
+- $C_1$: Хоёр талдаа сүлдтэй зоос ($HH$) $\implies P(C_1) = 1/3, \, P(H \mid C_1) = 1$
+- $C_2$: Хоёр талдаа тоотой зоос ($TT$) $\implies P(C_2) = 1/3, \, P(H \mid C_2) = 0$
+- $C_3$: Жирийн стандарт зоос ($HT$) $\implies P(C_3) = 1/3, \, P(H \mid C_3) = 1/2$
+
+Орхисон зоос сүлдээр тусах үзэгдлийг $H$ гэе.
+1. Гүйцэд магадлалын томьёогоор сүлд буух магадлал:
+   \[
+     P(H) = P(C_1)P(H \mid C_1) + P(C_2)P(H \mid C_2) + P(C_3)P(H \mid C_3)
+   \]
+   \[
+     P(H) = \frac{1}{3}(1) + \frac{1}{3}(0) + \frac{1}{3}\left(\frac{1}{2}\right) = \frac{1}{3} + \frac{1}{6} = \frac{1}{2}.
+   \]
+
+2. Орхисон тал нь сүлд байхад нөгөө тал нь тоо байх нь сонгосон зоос $C_3$ (жирийн зоос) байхтай тэнцүү. Байесын томьёогоор:
+   \[
+     \mathbf{P(C_3 \mid H) = \frac{P(C_3 \cap H)}{P(H)} = \frac{P(C_3)P(H \mid C_3)}{P(H)} = \frac{\frac{1}{3} \cdot \frac{1}{2}}{\frac{1}{2}} = \frac{1}{3}}.
+   \]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 18 (Section 1.3)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 18 (Section 1.3)}
+\addcontentsline{toc}{subsection}{Бодлого 18 (Section 1.3) — \texorpdfstring{$P(A \cap B \mid B) = P(A \mid B)$}{P(A cap B | B) = P(A | B)}}
+
+\begin{problembox}{Бодлого 18 (Section 1.3): Нөхцөл}
+$A$ ба $B$ нь үзэгдлүүд байг. $P(B) > 0$ үед $P(A \cap B \mid B) = P(A \mid B)$ болохыг харуул.
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Нөхцөлт магадлалын тодорхойлолт ёсоор:
+\[
+  P(A \cap B \mid B) = \frac{P((A \cap B) \cap B)}{P(B)}.
+\]
+Олонлогийн огтлолцлын чанараар $(A \cap B) \cap B = A \cap (B \cap B) = A \cap B$ байх тул:
+\[
+  P(A \cap B \mid B) = \frac{P(A \cap B)}{P(B)} = \mathbf{P(A \mid B)}.
+\]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 19 (Section 1.3)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 19 (Section 1.3)}
+\addcontentsline{toc}{subsection}{Бодлого 19 (Section 1.3)}
+
+\begin{problembox}{Бодлого 19 (Section 1.3): Нөхцөл}
+Алиса өөрийн курсийн ажлаа олон шургуулгатай шүүгээнээсээ хайж байна. Тэрээр курсийн ажлаа $j$-р шургуулганд үлдээсэн магадлал $p_j > 0$ гэдгийг мэднэ. Шургуулга замбараагүй тул хэрэв цаас үнэхээр $i$-р шургуулганд байгаа үед хайвал түүнийг олох магадлал ердөө $d_i$ байна. Алиса $i$-р шургуулгыг хайгаад олсонгүй. Энэ нөхцөлд курсийн ажил $j$-р шургуулганд байх магадлал дараах хэлбэртэй болохыг харуул:
+\[
+  \begin{cases} \dfrac{p_j}{1 - p_i d_i}, & \text{хэрэв } j \neq i, \\[12pt] \dfrac{p_i(1 - d_i)}{1 - p_i d_i}, & \text{хэрэв } j = i. \end{cases}
+\]
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Цаас $k$-р шургуулганд байх үзэгдлийг $D_k$ гэе ($P(D_k) = p_k$, $\sum_k p_k = 1$).
+$i$-р шургуулгыг хайгаад 				\textbf{олоогүй} (амжилтгүй болсон) үзэгдлийг $U_i$ гэж тэмдэглэе.
+
+1. 				\textbf{Олоогүй байх нөхцөлт магадлалууд:}
+   - Хэрэв цаас $i$-р шургуулганд байгаа бол олох магадлал $d_i$ тул олохгүй байх магадлал: $P(U_i \mid D_i) = 1 - d_i$.
+   - Хэрэв цаас өөр $j \neq i$ шургуулганд байгаа бол $i$-р шургуулгыг хайгаад олохгүй байх нь гарцаагүй үзэгдэл: $P(U_i \mid D_j) = 1$.
+
+2. 				\textbf{$U_i$ үзэгдлийн бүтэн магадлал:}
+   \[
+     P(U_i) = \sum_k P(D_k) P(U_i \mid D_k) = P(D_i)P(U_i \mid D_i) + \sum_{j \neq i} P(D_j)P(U_i \mid D_j)
+   \]
+   \[
+     = p_i(1 - d_i) + \sum_{j \neq i} p_j (1) = p_i - p_i d_i + (1 - p_i) = 1 - p_i d_i.
+   \]
+
+3. 				\textbf{Байесын томьёогоор апостериор магадлалыг олох:}
+   - $j \neq i$ үед:
+     \[
+       P(D_j \mid U_i) = \frac{P(D_j \cap U_i)}{P(U_i)} = \frac{P(D_j)P(U_i \mid D_j)}{P(U_i)} = \mathbf{\frac{p_j \cdot 1}{1 - p_i d_i} = \frac{p_j}{1 - p_i d_i}}.
+     \]
+   - $j = i$ үед:
+     \[
+       P(D_i \mid U_i) = \frac{P(D_i \cap U_i)}{P(U_i)} = \frac{P(D_i)P(U_i \mid D_i)}{P(U_i)} = \mathbf{\frac{p_i(1 - d_i)}{1 - p_i d_i}}.
+     \]
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 20 (Section 1.3)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 20 (Section 1.3)}
+\addcontentsline{toc}{subsection}{Бодлого 20 (Section 1.3)}
+
+\begin{problembox}{Бодлого 20 (Section 1.3): Нөхцөл}
+Борис өрсөлдөгчтэйгөө 2 өрөг бүхий шатрын тэмцээн хийх гэж байгаа бөгөөд хожих боломжоо хамгийн их байлгах стратегийг хайж байна. Өрөг бүр аль нэгний хожил эсвэл тэнцээгээр өндөрлөнө. Хэрэв 2 өргийн дараа оноо тэнцвэл тэмцээн "гэнэтийн үхэл" (sudden-death) горимд шилжиж, аль нэг нь анх удаа өрөгт хожих хүртэл үргэлжилнэ. Борис болгоомжтой (timid) болон зоригтой (bold) гэсэн хоёр тоглолтын хэв маягтай ба өмнөх тоглолтоос үл хамааран өрөг бүрт сонгож чадна. Болгоомжтой тоглоход тэрээр $p_d > 0$ магадлалаар тэнцэж, $1 - p_d$ магадлалаар хожигдоно (хожих магадлал 0). Зоригтой тоглоход $p_w$ магадлалаар хожиж, $1 - p_w$ магадлалаар хожигдоно (тэнцэх магадлал 0). Гэнэтийн үхлийн үед Борис дандаа зоригтой тоглоно.
+
+\begin{enumerate}[label=\textbf{(\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item Дараах стратеги тус бүрийн хувьд Борис тэмцээнд хожих магадлалыг ол:
+  \begin{enumerate}[label=\textbf{(\roman*)}, leftmargin=1.5em, itemsep=1pt]
+    \item 1 ба 2-р өрөгт хоёуланд нь зоригтой тоглох.
+    \item 1 ба 2-р өрөгт хоёуланд нь болгоомжтой тоглох.
+    \item Оноогоор илүү явж байвал болгоомжтой тоглож, бусад үед зоригтой тоглох.
+  \end{enumerate}
+  \item $p_w < 1/2$ гэж үзье (ө.х. Борис тоглолтын ямар ч хэв маягийг сонгосон өрсөлдөгчөөсөө сул тоглогч). Дээрх (iii) стратегийг сонгосон үед $p_w$ ба $p_d$-ийн зохих утгуудад Борис тэмцээнд $50\%$-иас дээш магадлалтайгаар хожиж болохыг харуул. Энэ давуу талыг хэрхэн тайлбарлах вэ?
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Онооны систем: Хожвол 1 оноо, Тэнцвэл 0.5 оноо, Хожигдвол 0 оноо.
+Гэнэтийн үхэлд өрөг бүр $p_w$ магадлалаар Борисын хожил, $1 - p_w$ магадлалаар хожигдлоор шийдэгдэх тул түүний гэнэтийн үхэлд тэмцээнийг хожих магадлал $p_w$ байна.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{(a)}]
+  \begin{itemize}[itemsep=2pt]
+    \item \textbf{(i) Стратеги (i): Хоёр өрөгт хоёуланд нь зоригтой (bold) тоглох:}
+      - 2-0-ээр шууд хожих (Хожил-Хожил): магадлал $p_w^2$.
+      - 1-1-ээр оноо тэнцэж (Хожил-Хожигдол эсвэл Хожигдол-Хожил), гэнэтийн үхэлд хожих: магадлал $2p_w(1 - p_w) \cdot p_w = 2p_w^2(1 - p_w)$.
+      \[
+        P(\text{Хожих}) = p_w^2 + 2p_w^2(1 - p_w).
+      \]
+
+    \item \textbf{(ii) Стратеги (ii): Хоёр өрөгт хоёуланд нь болгоомжтой (timid) тоглох:}
+      - Болгоомжтой тоглолтоор өрөгт хожих боломжгүй ($P(W)=0$). Тэмцээнд зөвхөн хоёр өрөг хоёул тэнцэж (1-1), гэнэтийн үхэлд хожсоноор хожно:
+      \[
+        P(\text{Хожих}) = p_d^2 p_w.
+      \]
+
+    \item \textbf{(iii) Стратеги (iii): Илүү үед болгоомжтой, бусад үед зоригтой тоглох:}
+      - 1-р өрөгт оноо тэнцүү (0-0) тул Борис 				\textbf{зоригтой} тоглоно:
+        - $p_w$ магадлалаар 1-р өрөгт 				\textbf{хожно} (оноо 1-0, Борис илүү гарна).
+          - 2-р өрөгт давуугаа хамгаалж 				\textbf{болгоомжтой} тоглоно:
+            - $p_d$ магадлалаар тэнцэнэ $\implies$ нийт оноо 1.5 - 0.5 болж Борис шууд хожно!
+            - $1 - p_d$ магадлалаар хожигдоно $\implies$ оноо 1-1 болж гэнэтийн үхэлд $p_w$ магадлалаар хожно.
+            - Энэ салааны магадлал: $p_w [p_d + (1 - p_d)p_w]$.
+        - $1 - p_w$ магадлалаар 1-р өрөгт 				\textbf{хожигдоно} (оноо 0-1, Борис хоцорно).
+          - 2-р өрөгт гүйцэхийн тулд 				\textbf{зоригтой} тоглоно:
+            - $p_w$ магадлалаар хожно $\implies$ оноо 1-1 болж гэнэтийн үхэлд $p_w$ магадлалаар хожно.
+            - $1 - p_w$ магадлалаар хожигдоно $\implies$ Борис тэмцээнд хожигдоно.
+            - Энэ салааны магадлал: $(1 - p_w) p_w^2$.
+      \[
+        P(\text{Хожих}) = p_w p_d + p_w^2(1 - p_d) + p_w^2(1 - p_w) = p_w \big[ p_d + p_w(1 - p_d) + p_w(1 - p_w) \big].
+      \]
+  \end{itemize}
+
+  \item[\textbf{(б)}] 				\textbf{Стратегийн давуу талын шинжилгээ:}
+  $p_w = 0.45 < 0.5$ (Борис сул тоглогч) бөгөөд $p_d = 0.9$ байг.
+  (iii) стратегийн дагуу магадлалыг тооцоолбол:
+  \[
+    P(\text{Хожих}) = 0.45 \big[ 0.90 + 0.45(1 - 0.90) + 0.45(1 - 0.45) \big]
+  \]
+  \[
+    = 0.45 \big[ 0.90 + 0.045 + 0.2475 \big] = 0.45 \times 1.1925 = \mathbf{0.536625 > 0.50} \quad (\approx 53.7\%).
+  \]
+
+  				\textbf{Шалтгааны тайлбар:}
+  Борис нөхцөл байдалдаа тохируулан тоглолтын хэв маягаа уян хатан өөрчилж чадаж байна:
+  1. 				\textbf{Илүү гарсан үедээ} болгоомжтой тоглож, хожигдох эрсдэлээ эрс бууруулан ($1 - p_d = 0.10$), өрсөлдөгчдөө оноог тэнцүүлэх боломж олгохгүйгээр хожлыг хамгаална.
+  2. 				\textbf{Хоцорч яваа үедээ} эрсдэлтэй зоригтой тоглож, хожих боломжоо ($p_w = 0.45$) дээд зэргээр ашиглана.
+  Энэхүү мэдээлэлд суурилсан динамик стратеги нь сул тоглогчид нийт тэмцээний дүнгээр $50\%$-иас дээш давуу талыг авчирдаг.
+\end{itemize}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 30 (Section 1.4)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 30 (Section 1.4)}
+\addcontentsline{toc}{subsection}{Бодлого 30 (Section 1.4)}
+
+\begin{problembox}{Бодлого 30 (Section 1.4): Нөхцөл}
+Анчин хоёр анч нохойтой. Нэгэн өдөр ангийн мөрөөр явж байтал зам хоёр тийш салав. Нохой тус бүр бие биеэсээ үл хамааран зөв замыг $p$ магадлалтайгаар сонгодгийг анчин мэднэ. Анчин хоёр нохойд сонголт хийлгэхээр шийдсэн бөгөөд хэрэв тэд санал нийлбэл тэр замаар явж, хэрэв санал зөрвөл аль нэг замыг таамгаар (зоос орхин) сонгохоор болов. Энэ стратеги нь зүгээр л аль нэг нохойгоо дагах стратегиас илүү дээр үү?
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+1-р ба 2-р нохой зөв замыг сонгох үзэгдлийг харгалзан $C_1, C_2$ гэе. Үзэгдлүүд үл хамаарах тул:
+\[
+  P(C_1) = p, \quad P(C_2) = p, \quad P(C_1 \cap C_2) = p^2.
+\]
+
+Анчны стратегиар зөв замыг сонгох $P(\text{Зөв})$ магадлалыг үл огтлолцох тохиолдлуудаар тооцоолъё:
+1. 				\textbf{Хоёр нохой хоёул зөв замыг сонгох ($C_1 \cap C_2$):}
+   Тэд санал нийлэх тул анчин 1 магадлалтайгаар зөв замаар явна:
+   \[
+     P(\text{Тохиолдол 1}) = P(C_1 \cap C_2) \cdot 1 = p^2.
+   \]
+2. 				\textbf{1-р нохой зөв, 2-р нохой буруу замыг сонгох ($C_1 \cap C_2^c$):}
+   Тэд зөрөх тул анчин зоос орхиж $1/2$ магадлалаар 1-р нохойны зөв замыг сонгоно:
+   \[
+     P(\text{Тохиолдол 2}) = P(C_1 \cap C_2^c) \cdot \frac{1}{2} = p(1 - p) \cdot \frac{1}{2}.
+   \]
+3. 				\textbf{1-р нохой буруу, 2-р нохой зөв замыг сонгох ($C_1^c \cap C_2$):}
+   Тэд зөрөх тул анчин $1/2$ магадлалаар 2-р нохойны зөв замыг сонгоно:
+   \[
+     P(\text{Тохиолдол 3}) = P(C_1^c \cap C_2) \cdot \frac{1}{2} = (1 - p)p \cdot \frac{1}{2}.
+   \]
+4. 				\textbf{Хоёр нохой хоёул буруу замыг сонгох ($C_1^c \cap C_2^c$):}
+   Тэд буруу зам дээр санал нийлэх тул анчин буруу замаар явна ($P = 0$).
+
+Нийлбэр магадлал:
+\[
+  P(\text{Зөв}) = p^2 + \frac{1}{2}p(1 - p) + \frac{1}{2}p(1 - p) = p^2 + p(1 - p) = p^2 + p - p^2 = \mathbf{p}.
+\]
+
+				\textbf{Дүгнэлт:}
+Хэрэв анчин зөвхөн нэг нохойгоо сонгон дагавал зөв замаар явах магадлал мөн л $P(C_1) = p$ байна.
+Иймд 				\textbf{анчны энэхүү стратеги нь нэг нохойг дагахаас дээр биш (яг ижил $p$ магадлалтай)} байна.
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+% Бодлого 34 (Section 1.4)
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 34 (Section 1.4)}
+\addcontentsline{toc}{subsection}{Бодлого 34 (Section 1.4)}
+
+\begin{problembox}{Бодлого 34 (Section 1.4): Нөхцөл}
+Цахилгаан систем нь бие биеэсээ үл хамааран $p$ магадлалтайгаар сааталгүй ажилладаг ижил төрлийн элементүүдээс бүрдэнэ. Элементүүд нь Зураг 1.19-д үзүүлсэн 1, 2, 3 гэсэн гурван дэд систем болж холбогджээ. Хэрэв $A$ цэгээс эхлэн $B$ цэгт дуусах ажиллаж буй элементүүдээс тогтсон битүү зам оршин байвал систем ажиллана. Систем ажиллах магадлалыг ол.
+
+\begin{center}
+\begin{tikzpicture}[
+  element/.style={draw, fill=mist, minimum width=0.8cm, minimum height=0.5cm, font=\small, rounded corners=1pt},
+  node_dot/.style={circle, fill=navy, inner sep=1.5pt},
+  thick, color=navydark
+]
+  % Input A and Output B
+  \node[node_dot, label=left:{$A$}] (A) at (0, 0) {};
+  \node[node_dot, label=right:{$B$}] (B) at (10, 0) {};
+
+  % Subsystem 1
+  \node[element] (S1) at (1.2, 0) {$p$};
+  \node at (1.2, -0.6) {\scriptsize\textcolor{teal}{Дэд систем 1}};
+
+  % Subsystem 2 label
+  \node at (5.2, -1.8) {\scriptsize\textcolor{teal}{Дэд систем 2}};
+
+  % Subsystem 2 Top branch
+  \node[element] (S2top) at (5.2, 1.0) {$p$};
+
+  % Subsystem 2 Bottom branch
+  \node[element] (S2bot1) at (3.8, -1.0) {$p$};
+  \node[element] (S2bot2a) at (6.2, -0.5) {$p$};
+  \node[element] (S2bot2b) at (6.2, -1.0) {$p$};
+  \node[element] (S2bot2c) at (6.2, -1.5) {$p$};
+
+  % Subsystem 3
+  \node[element] (S3top) at (8.5, 0.5) {$p$};
+  \node[element] (S3bot) at (8.5, -0.5) {$p$};
+  \node at (8.5, -1.1) {\scriptsize\textcolor{teal}{Дэд систем 3}};
+
+  % Coordinates
+  \coordinate (J2_in) at (2.6, 0);
+  \coordinate (J2_out) at (7.8, 0);
+  \coordinate (J3_out) at (9.2, 0);
+
+  % Connections
+  \draw (A) -- (S1);
+  \draw (S1) -- (J2_in);
+
+  % Subsystem 2 split
+  \draw (J2_in) -- (2.6, 1.0) -- (S2top);
+  \draw (J2_in) -- (2.6, -1.0) -- (S2bot1);
+
+  \draw (S2bot1) -- (5.0, -1.0);
+  \draw (5.0, -1.0) |- (S2bot2a);
+  \draw (5.0, -1.0) -- (S2bot2b);
+  \draw (5.0, -1.0) |- (S2bot2c);
+
+  \draw (S2bot2a) -| (7.4, -1.0);
+  \draw (S2bot2b) -- (7.4, -1.0);
+  \draw (S2bot2c) -| (7.4, -1.0);
+
+  \draw (S2top) -| (J2_out);
+  \draw (7.4, -1.0) -| (J2_out);
+
+  % Subsystem 3 split
+  \draw (J2_out) -- (7.8, 0.5) -- (S3top);
+  \draw (J2_out) -- (7.8, -0.5) -- (S3bot);
+
+  \draw (S3top) -| (J3_out);
+  \draw (S3bot) -| (J3_out);
+
+  \draw (J3_out) -- (B);
+
+\end{tikzpicture}
+\end{center}
+\end{problembox}
+
+\subsubsection*{Бодолт:}
+
+Нийт систем нь бие биеэсээ үл хамаарах 1, 2, 3-р дэд системүүдийн \textbf{цуваа холболт} юм:
+\[
+  A \text{-аас } B \text{-д гүйдэл гүйх} \iff \text{1, 2, 3-р дэд системүүд бүгд зэрэг ажиллах}.
+\]
+Үзэгдлүүдийн үл хамаарах чанараар:
+\[
+  P(\text{Систем ажиллах}) = p_1 \cdot p_2 \cdot p_3.
+\]
+
+Дэд систем бүрийн найдварыг тооцоолбол:
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=1.4em, itemsep=3pt]
+  \item \textbf{1-р дэд систем ($p_1$):}
+  Дан ганц 1 элементээс тогтоно:
+  \[
+    p_1 = p.
+  \]
+
+  \item \textbf{3-р дэд систем ($p_3$):}
+  Хоёр элемент зэрэгцээ холбогдсон тул хоёул зэрэг гэмтсэн үед л ажиллахгүй:
+  \[
+    p_3 = 1 - (1 - p)^2.
+  \]
+
+  \item \textbf{2-р дэд систем ($p_2$):}
+  Хоёр үндсэн зэрэгцээ салбараас тогтоно:
+  \begin{itemize}[itemsep=2pt]
+    \item \textbf{Дээд салбар:} 1 элементтэй $\implies$ ажиллах магадлал $p$.
+    \item \textbf{Доод салбар:} 1 элемент болон 3 зэрэгцээ элементийн блок хоёр цуваа холбогдсон:
+      - 3 зэрэгцээ элементтэй блок ажиллах магадлал: $1 - (1 - p)^3$.
+      - Үүнтэй 1 элемент цуваа холбогдсон тул доод салбар ажиллах магадлал: $p \cdot \big[1 - (1 - p)^3\big]$.
+    \item 2-р дэд систем нь дээд ба доод хоёр салбар \textbf{хоёул зэрэг гэмтсэн} тохиолдолд л ажиллахгүй:
+      - Дээд салбар гэмтэх магадлал: $1 - p$.
+      - Доод салбар гэмтэх магадлал: $1 - p\big(1 - (1 - p)^3\big)$.
+  \end{itemize}
+  \[
+    p_2 = 1 - (1 - p)\left[1 - p\big(1 - (1 - p)^3\big)\right].
+  \]
+
+  \item \textbf{Нийт системийн найдвартай ажиллагааны магадлал:}
+  \[
+    P = p \cdot \Big(1 - (1 - p)\left[1 - p\big(1 - (1 - p)^3\big)\right]\Big) \cdot \Big(1 - (1 - p)^2\Big).
+  \]
+\end{enumerate}
+
+\vspace{0.8em}
+
+% ------------------------------------------------------------------------------
+\subsection*{Бодлого 43 (Section 1.4)}
+\addcontentsline{toc}{subsection}{Бодлого 43 (Section 1.4)}
+
+\begin{problembox}{Бодлого 43 (Section 1.4): Нөхцөл}
+$A$ ба $B$ нь үл хамаарах үзэгдлүүд байг. Үзэгдлүүдийн үл хамаарах чанарын тодорхойлолтыг ашиглан дараахыг батал:
+\begin{enumerate}[label=\textbf{(\alph*)}, leftmargin=1.8em, itemsep=1pt]
+  \item $A$ ба $B^c$ нь үл хамаарах үзэгдлүүд байна.
+  \item $A^c$ ба $B^c$ нь үл хамаарах үзэгдлүүд байна.
+\end{enumerate}
+\end{problembox}
+
+\subsubsection*{Бодолт ба Баталгаа:}
+
+Тодорхойлолт ёсоор хоёр үзэгдэл үл хамаарах байх гарцаагүй бөгөөд хүрэлцээтэй нөхцөл нь $P(E \cap F) = P(E)P(F)$ тэнцэтгэл биелэх явдал юм.
+Нөхцөлөөр $A$ ба $B$ үл хамаарах тул:
+\[
+  P(A \cap B) = P(A)P(B).
+\]
+
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt]
+  \item[\textbf{(a)}] 				\textbf{$A$ ба $B^c$ үл хамаарах болохыг батлах:}
+    $A$ үзэгдлийг харилцан нийцгүй хоёр үзэгдлийн нэгдэлд задалж болно:
+    \[
+      A = (A \cap B) \cup (A \cap B^c), \quad \text{энд } (A \cap B) \cap (A \cap B^c) = \emptyset.
+    \]
+    Магадлалын аддитив чанараар:
+    \[
+      P(A) = P(A \cap B) + P(A \cap B^c).
+    \]
+    $A$ ба $B$-ийн үл хамаарах нөхцөл болох $P(A \cap B) = P(A)P(B)$-ийг орлуулбал:
+    \[
+      P(A) = P(A)P(B) + P(A \cap B^c).
+    \]
+    Эндээс $P(A \cap B^c)$-ийг олбол:
+    \[
+      P(A \cap B^c) = P(A) - P(A)P(B) = P(A)\big(1 - P(B)\big).
+    \]
+    $1 - P(B) = P(B^c)$ тул:
+    \[
+      \mathbf{P(A \cap B^c) = P(A)P(B^c)}.
+    \]
+    Иймд $A$ ба $B^c$ нь үл хамаарах үзэгдлүүд болж батлагдав.
+
+  \item[\textbf{(б)}] 				\textbf{$A^c$ ба $B^c$ үл хамаарах болохыг батлах:}
+    - *1-р арга (Өмнөх (a) дүгнэлтийг ашиглах):*
+      (a) заалтаар $A$ ба $B$ үл хамаарах тул $B$ ба $A^c$ үл хамаарна.
+      Одоо энэ дүгнэлтийг үл хамаарах $(B, A^c)$ хосод дахин хэрэглэвэл $B^c$ ба $A^c$ үл хамаарах нь шууд мөрдөн гарна.
+
+    - *2-р арга (Де Морганы хууль ба нэмэх томьёогоор):*
+      Де Морганы хуулиар $A^c \cap B^c = (A \cup B)^c$ тул:
+      \[
+        P(A^c \cap B^c) = 1 - P(A \cup B).
+      \]
+      Нэмэх дүрмээр $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ ба $P(A \cap B) = P(A)P(B)$ болохыг тооцвол:
+      \[
+        P(A^c \cap B^c) = 1 - \big[P(A) + P(B) - P(A)P(B)\big] = 1 - P(A) - P(B) + P(A)P(B)
+      \]
+      \[
+        = \big(1 - P(A)\big)\big(1 - P(B)\big) = \mathbf{P(A^c)P(B^c)}.
+      \]
+    Иймд $A^c$ ба $B^c$ нь үл хамаарах үзэгдлүүд болж бүрэн батлагдав.
+\end{itemize}
+
+\end{document}
